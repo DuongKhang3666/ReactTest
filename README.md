@@ -95,7 +95,7 @@ Admin
 
 ---
 
-# 2. Phạm vi MVP(tính năng cốt lõi)
+# 2. Phạm vi MVP(chức năng cốt lõi)
 
 ## 2.1. Customer
 
@@ -287,66 +287,69 @@ Không cần tạo toàn bộ file ngay lập tức. Chỉ tạo folder/file khi
 
 ## 4.2. Chia frontend cho 3 người
 
-### FE1
+### FE1 — Authentication, Home, Search, Profile, Dashboard
 
-```text
-pages/auth/
-pages/customer/Home.jsx
-pages/customer/SearchTrips.jsx
-
-components/common/
-layouts/
-routes/
-contexts/
-```
-
-Chịu trách nhiệm:
-
-- Authentication
-- Layout
+**Customer:**
+- Login / Register / Logout
 - Home
-- Search
-- Query foundation
-
-### FE2
-
-```text
-pages/customer/TripDetail.jsx
-pages/customer/Booking.jsx
-
-components/booking/
-queries/tripQueries.js
-queries/bookingQueries.js
-```
-
-Chịu trách nhiệm:
-
-- Trip detail
-- Seat map
-- Chọn ghế
-- Booking
-- Mutation / invalidation
-
-### FE3
-
-```text
-pages/customer/MyBookings.jsx
-pages/customer/Profile.jsx
-
-pages/admin/
-queries/adminQueries.js
-```
-
-Chịu trách nhiệm:
-
-- Vé của tôi
+- Search trips
+- Filter / Sort
 - Profile
+
+**Admin:**
 - Dashboard
-- Admin CRUD
 
-Các thư mục `components`, `services`, `queries`, `hooks` là code dùng chung. Thay đổi cấu trúc chung phải được nhóm thống nhất.
+**TanStack Query:**
+- Trips / search
+- Dashboard
 
----
+**Shared:**
+- ProtectedRoute / AdminRoute
+- Layout và một phần common components
+
+### FE2 — Trip, Seat, Bus, Route, Users
+
+**Customer:**
+- Trip Detail
+- Seat Map
+- Select Seat
+
+**Admin:**
+- Buses CRUD
+- Routes CRUD
+- Users management
+
+**TanStack Query:**
+- Trips
+- Seats
+- Buses
+- Routes
+- Users
+
+FE2 phối hợp trực tiếp với FE3 ở luồng `Trip → Seat → Booking`.
+
+### FE3 — Booking, My Bookings, Trip Admin, Booking Admin
+
+**Customer:**
+- Booking
+- My Bookings
+- Booking Detail
+- Cancel Booking
+
+**Admin:**
+- Trips CRUD
+- Bookings management
+
+**TanStack Query:**
+- Bookings
+- Admin Trips
+
+> **Cân bằng nhóm:** FE1 tập trung nền tảng và tìm kiếm; FE2 tập trung chuyến/ghế và dữ liệu quản trị (xe, tuyến, người dùng); FE3 tập trung nghiệp vụ booking và quản trị chuyến/vé.
+- Admin Bookings
+
+> **Lưu ý:** Admin được chia cho cả 3 FE; không giao toàn bộ Admin cho FE3.
+
+Các thư mục `components`, `services`, `queries`, `hooks` và `routes` là code dùng chung. Thay đổi cấu trúc dùng chung phải được nhóm thống nhất trước khi merge.
 
 # 5. Yêu cầu môi trường
 
@@ -1504,333 +1507,182 @@ Một task chỉ được xem là hoàn thành khi:
 
 ## TUẦN 1 — Phân tích, thiết kế và nền móng
 
-### Mục tiêu cuối tuần
+### Mục tiêu
+- Chốt MVP, Customer/Admin, use case và flow đặt vé.
+- Chốt ERD 7 bảng và API contract.
+- Setup React + Vite + TanStack Query + ESLint.
+- Setup Spring Boot + MySQL.
+- Frontend có thể chạy bằng mock data mà không phải chờ backend.
 
-- Chốt phạm vi MVP.
-- Chốt Customer/Admin.
-- Hoàn thành Use Case.
-- Hoàn thành ERD.
-- Chốt API contract.
-- Frontend chạy với Vite + React + TanStack Query.
-- Backend chạy được.
-- MySQL kết nối được.
-- Frontend có mock UI để không phụ thuộc backend.
-
-### Thứ 2
-
-**Cả nhóm**
-- Chốt tên đề tài.
-- Chốt chức năng MVP.
-- Chốt user role.
-- Chốt luồng Customer/Admin.
-
-**FE1**
-- Tạo Vite + React.
-- Chọn JavaScript.
-- Chọn ESLint.
+### FE1
+- Tạo Vite + React + JavaScript + ESLint.
 - Cài React Router, TanStack Query, Axios.
-- Tạo cấu trúc thư mục.
+- QueryClientProvider, Router, layout, auth structure.
+- Mock Login/Register/Home/Search.
 
-**FE2**
-- Wireframe Trip Detail.
-- Wireframe Seat Map.
-- Wireframe Booking.
+### FE2
+- Mock Trip Detail.
+- Mock Seat Map.
+- Chuẩn bị selected-seat state.
 
-**FE3**
-- Wireframe Login/Register.
-- Wireframe My Bookings.
-- Wireframe Admin.
+### FE3
+- Mock Booking.
+- Mock My Bookings.
+- Chuẩn bị query/mutation structure cho booking.
 
-### Thứ 3
+### BE1
+- Tạo Spring Boot project.
+- Kết nối MySQL/JPA.
+- User/Auth/Bus/Route/Trip skeleton.
 
-**Cả nhóm**
-- ERD 7 bảng.
+### BE2
+- Seat/Booking/Ticket skeleton.
+- Seed data structure.
 
-**BE1 + BE2**
-- Spring Boot.
-- MySQL.
-- JPA.
-- Validation.
+### M1 — Kết quả tuần 1
+- React + Vite + ESLint chạy.
+- TanStack Query hoạt động.
+- Backend + MySQL chạy.
+- ERD + API contract hoàn thành.
+- Mock UI của cả 3 FE hoàn thành.
 
-**FE1**
-- QueryClientProvider.
-- React Router.
-- Layout.
-
-### Thứ 4
-
-**Cả nhóm**
-- API contract:
-  - URL
-  - HTTP method
-  - request
-  - response
-  - status code
-  - role
-
-**BE1**
-- User/Auth skeleton.
-
-**BE2**
-- Seat/Booking/Ticket model.
-
-### Thứ 5
-
-**FE1**
-- Auth UI.
-- Search mock.
-- `useQuery` mock.
-
-**FE2**
-- Trip Detail.
-- Seat Map mock.
-
-**FE3**
-- Booking History.
-- Admin table mock.
-
-### Thứ 6
-
-**BE1**
-- Bus/Route/Trip CRUD skeleton.
-
-**BE2**
-- Seat/Booking API skeleton.
-- Seed data.
-
-**Cả nhóm**
-- Kiểm tra repository.
-
-### M1 — Cuối tuần 1
-
-Phải có:
-
-```text
-ERD ✅
-API contract ✅
-Frontend chạy ✅
-Backend chạy ✅
-MySQL kết nối ✅
-Mock UI ✅
-Git workflow ✅
-```
-
----
-
-## TUẦN 2 — Luồng nghiệp vụ cốt lõi
-
-### Mục tiêu cuối tuần
-
-Khách hàng có thể chạy:
-
-```text
-Register
-   ↓
-Login
-   ↓
-Search
-   ↓
-Trip Detail
-   ↓
-Select Seat
-   ↓
-Booking
-   ↓
-My Bookings
-```
-
-### Thứ 2
-
-**FE1**
-- Login/Register/Logout.
-- ProtectedRoute.
-- AdminRoute.
-
-**FE2**
-- Trip detail từ API thật.
-- Seats từ API thật.
-
-**FE3**
-- My Bookings API.
-- Booking detail.
-
-### Thứ 3
-
-**BE1**
-- Auth/JWT.
-- Bus/Route/Trip API.
-
-**BE2**
-- Seat API.
-- Create booking API.
-
-### Thứ 4
-
-**FE1**
-- Search API.
-- Query key theo filter.
-
-**FE2**
-- `useMutation`.
-- Booking.
-- Invalidation.
-
-**FE3**
-- History/detail/cancel.
-
-### Thứ 5
-
-**BE1**
-- Trip filter.
-- Validation.
-
-**BE2**
-- Cancel booking.
-- Chống đặt trùng ghế.
-
-### Thứ 6
-
-Cả nhóm chạy end-to-end.
-
-### M2 — Cuối tuần 2
-
-Nếu còn thiếu luồng booking, không thêm chức năng mới.
-
----
-
-## TUẦN 3 — TanStack Query + Admin + Security
-
-### Mục tiêu cuối tuần
-
-- TanStack Query được dùng có hệ thống.
-- Admin CRUD chính hoạt động.
-- JWT + role hoạt động.
-- Booking ổn định.
-- Feature freeze.
-
-### TanStack Query phải có
-
-```text
-useQuery
-useMutation
-queryKey
-cache
-staleTime
-invalidateQueries
-loading
-error
-empty state
-```
-
-### Admin
-
-```text
-Buses CRUD
-Routes CRUD
-Trips CRUD
-Bookings
-Users
-Dashboard
-```
-
-### Backend
-
-```text
-JWT
-Role authorization
-Validation
-Transaction
-Duplicate seat handling
-Exception handler
-```
-
-### M3 — Feature Freeze
-
-Sau mốc này không mở chức năng lớn.
-
----
-
-## TUẦN 4 — Integration + Test + Demo
+## TUẦN 2 — Customer core flow
 
 ### Mục tiêu
-
-- Setup được từ README trên máy sạch.
-- Không còn lỗi chức năng nghiêm trọng.
-- Responsive.
-- Tài liệu hoàn chỉnh.
-- Demo hoàn chỉnh.
-
-### Thứ 2
-
-Fresh setup từ GitHub.
-
-Test:
+Hoàn thành:
 
 ```text
-Auth
-Search
-Trip
-Seat
-Booking
-Admin
+Register → Login → Search → Trip → Seat → Booking → My Bookings
 ```
 
-### Thứ 3
+### FE1
+- Login/Register/Logout.
+- ProtectedRoute/AdminRoute.
+- Home/Search API.
+- Filter/Sort.
+- Profile cơ bản.
+- `useQuery` cho trips/search.
 
-Edge cases:
+### FE2
+- Trip Detail từ API thật.
+- Seat Map từ API thật.
+- Available/Booked/Selected state.
+- Loading/Error/Empty state.
+- `useQuery` cho trip và seats.
 
-```text
-Không có chuyến
-Hết ghế
-Ghế vừa bị đặt
-Token hết hạn
-Không có quyền
-Request sai
-```
+### FE3
+- Booking form.
+- Create booking mutation.
+- My Bookings.
+- Booking Detail.
+- Cancel Booking.
+- `useMutation` + invalidation.
 
-### Thứ 4
+### BE1
+- Auth/JWT.
+- Bus/Route/Trip API.
+- Search/filter trip.
+- Validation.
 
-Frontend:
+### BE2
+- Seat API.
+- Booking/Ticket API.
+- My bookings / cancel.
+- Duplicate-seat protection.
 
-- Responsive.
-- UI polish.
-- Console sạch.
+### M2 — Kết quả tuần 2
+Customer có thể chạy booking end-to-end bằng API thật. Nếu booking chưa ổn định thì không mở rộng chức năng mới.
 
-Backend:
+## TUẦN 3 — Admin + TanStack Query + Security
 
-- Seed/reset database.
-- API ổn định.
+### Mục tiêu
+- Admin CRUD chính hoạt động.
+- JWT + role authorization hoàn chỉnh.
+- TanStack Query được sử dụng có hệ thống ở cả 3 FE.
+- Cuối tuần feature freeze.
 
-### Thứ 5
+### FE1
+- Admin Dashboard.
+- Queries cho dashboard.
 
+### FE2
+- Admin Buses CRUD.
+- Admin Routes CRUD.
+- Admin Users.
+- Query + mutation + invalidation cho buses/routes/users.
+
+### FE3
+- Admin Trips CRUD.
+- Admin Bookings.
+- Query + mutation + invalidation.
+
+### Cả 3 FE
+- `useQuery`.
+- `useMutation`.
+- `queryKey`.
+- Cache.
+- `staleTime`.
+- `invalidateQueries`.
+- Loading/error/empty state.
+- Phân biệt server state và client/UI state.
+
+### Backend
+- JWT + role authorization.
+- Validation + exception handler.
+- Booking transaction.
+- Duplicate-seat protection.
+
+### M3 — Feature Freeze
+Từ thời điểm này không thêm chức năng lớn. Chỉ bug fix, UI polish, testing, documentation và demo.
+
+## TUẦN 4 — Integration, test, tài liệu và demo
+
+### Mục tiêu
+Một thành viên mới có thể clone repository và chạy project theo README; hệ thống có thể demo trọn luồng Customer và Admin.
+
+### Ngày 1 — Fresh setup và regression
+- Cả nhóm: fresh setup từ repository.
+- FE1: regression auth/search/dashboard.
+- FE2: regression trip/seat/bus/route/users.
+- FE3: regression booking/trips/bookings admin.
+
+### Ngày 2 — Edge cases
+- Không có chuyến.
+- Hết ghế.
+- Ghế vừa bị người khác đặt.
+- Token hết hạn.
+- Không đủ quyền.
+- Request sai dữ liệu.
+
+### Ngày 3 — UI và build
+- Responsive mobile/tablet/desktop.
+- UI consistency.
+- Loại console error.
+- `npm run build`.
+- Backend seed/reset data kiểm tra.
+
+### Ngày 4 — Tài liệu
 - README.
-- Báo cáo.
-- Slide.
-- Architecture.
 - ERD.
 - API document.
-- Demo rehearsal.
+- Báo cáo.
+- Slide.
+- Demo script và phân vai.
 
-### Thứ 6
-
+### Ngày 5 — Release
+- Rehearsal toàn bộ demo.
 - Fix lỗi cuối.
+- Kiểm tra `.env`/secret.
 - Tag release.
-- Kiểm tra repository.
 
-### M4 — Release
-
-```text
-Source ✅
-README ✅
-Database ✅
-Backend ✅
-Frontend ✅
-Demo ✅
-Report ✅
-Slides ✅
-```
-
----
+### M4 — Kết quả cuối
+- Frontend build được.
+- Backend chạy được.
+- MySQL/seed dựng được.
+- Customer flow hoàn chỉnh.
+- Admin flow hoàn chỉnh.
+- README đủ để setup máy mới.
+- Report + slides + demo hoàn chỉnh.
 
 # 32. KỊCH BẢN DEMO
 
@@ -1917,7 +1769,7 @@ Slides ✅
 File phân chia công việc chi tiết 4 tuần:
 
 ```text
-PHAN_CHIA_CONG_VIEC_WEBSITE_DAT_VE_XE_CHI_TIET_4_TUAN.docx
+PHAN_CHIA_CONG_VIEC_WEBSITE_DAT_VE_XE_4_TUAN.docx
 ```
 
 README này là tài liệu hướng dẫn tổng thể của repository.
