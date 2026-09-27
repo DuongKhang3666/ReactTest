@@ -140,7 +140,7 @@ CREATE TABLE IF NOT EXISTS bookings (
     CONSTRAINT fk_bookings_trip
         FOREIGN KEY (trip_id) REFERENCES trips(id)
         ON UPDATE CASCADE ON DELETE RESTRICT,
-    CONSTRAINT chk_bookings_total (total_amount >= 0)
+    CONSTRAINT chk_bookings_total CHECK (total_amount >= 0)
 ) ENGINE=InnoDB;
 
 -- -------------------------------------------------------------
