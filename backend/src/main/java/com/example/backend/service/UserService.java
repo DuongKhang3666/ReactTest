@@ -1,5 +1,6 @@
 package com.example.backend.service;
 
+import com.example.backend.entity.Role;
 import com.example.backend.entity.User;
 import com.example.backend.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -46,5 +47,13 @@ public class UserService {
 
     public boolean existsByEmail(String email) {
         return userRepository.existsByEmail(email);
+    }
+
+    public User updateUserRole(Long id, Role role) {
+        User user = getUserById(id);
+
+        user.setRole(role);
+
+        return userRepository.save(user);
     }
 }
