@@ -119,7 +119,7 @@ function EditTripForm({ tripId, onClose }) {
   const buses = busesQuery.data.data;
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form className="trip-form" onSubmit={handleSubmit}>
       <h2>Chỉnh sửa chuyến #{tripId}</h2>
 
       <div>

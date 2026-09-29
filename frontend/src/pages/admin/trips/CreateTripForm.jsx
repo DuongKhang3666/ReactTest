@@ -4,7 +4,7 @@ import { createAdminTrip } from "../../../api/adminTripApi";
 import { getAdminBuses } from "../../../api/adminBusApi";
 import { getAdminRoutes } from "../../../api/adminRouteApi";
 
-function CreateTripForm() {
+function CreateTripForm({ onClose }) {
   const queryClient = useQueryClient();
 
   const [form, setForm] = useState({
@@ -29,6 +29,7 @@ function CreateTripForm() {
 
   const createMutation = useMutation({
     mutationFn: createAdminTrip,
+
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ["admin", "trips"],
@@ -43,6 +44,8 @@ function CreateTripForm() {
         status: "SCHEDULED",
         notes: "",
       });
+
+      onClose();
     },
   });
 
@@ -85,7 +88,7 @@ function CreateTripForm() {
   const buses = busesQuery.data.data;
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form className="trip-form" onSubmit={handleSubmit}>
       <h2>Tạo chuyến xe</h2>
 
       <div>
