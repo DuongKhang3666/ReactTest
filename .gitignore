@@ -1,0 +1,22 @@
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Docker
+docker-compose.yml
+
+# MySQL / Docker data
+mysql_data/
+
+# Draw.io
+backendJ2EE.drawio.svg
+
+# Ignore ALL backend resources
+/backend/src/main/resources/**
+
+# Agent
+AGENT_CHANGELOG.md
+
+# PostMan
+/backend/booking-test.postman_collection.json
