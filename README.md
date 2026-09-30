@@ -1158,6 +1158,8 @@ queryKey:
 GET /api/trips/{tripId}/seats
 ```
 
+Availability is calculated for the trip from its bus seats and tickets. The response status is `AVAILABLE`, `HELD`, `BOOKED`, or `INACTIVE`; holder/passenger details are never included. Expired holds are reported as `AVAILABLE` even before scheduled cleanup runs.
+
 Frontend:
 
 ```text
@@ -1174,7 +1176,44 @@ POST  /api/bookings
 GET   /api/bookings/my
 GET   /api/bookings/{id}
 PATCH /api/bookings/{id}/cancel
+POST  /api/bookings/{id}/tickets
+DELETE /api/bookings/{id}/tickets/{ticketId}
+PATCH /api/bookings/{id}/tickets/{ticketId}/cancel
+POST  /api/bookings/{id}/confirm
 ```
+
+### Cancellation
+
+- A booking/ticket can be cancelled before the trip departure time.
+- Cancellation is not allowed at or after the trip departure time.
+
+
+`POST /api/bookings` starts or reuses the customer's pending checkout and reserves its first seat:
+
+```json
+{
+  "tripId": 100,
+  "seatId": 25,
+  "passengerName": "Nguyen Van A",
+  "passengerPhone": "0900000000"
+}
+```
+
+Add a seat to the same pending checkout with `POST /api/bookings/{id}/tickets`, using `seatId` and optional passenger details. `DELETE /api/bookings/{id}/tickets/{ticketId}` releases a reserved seat but keeps its ticket row reusable. `PATCH /api/bookings/{id}/tickets/{ticketId}/cancel` cancels one confirmed ticket; cancellation is allowed before trip departure. `PATCH /api/bookings/{id}/cancel` cancels a booking; the older `DELETE /api/bookings/{id}` route remains supported.
+
+Confirm simulates successful payment and accepts passenger details for reserved tickets:
+
+```json
+{
+  "passengers": [
+    { "ticketId": 501, "passengerName": "Nguyen Van A", "passengerPhone": "0900000000" }
+  ]
+}
+```
+
+The backend determines ticket prices from the trip. No online payment provider is called. `GET /api/bookings` remains an alias for `GET /api/bookings/my`. Pending checkouts without a live reserved ticket are hidden from the list. The default HOLD is 10 minutes and can be changed with `booking.hold-duration-minutes`; cleanup runs every 30 seconds by default and can be tuned with `booking.cleanup-interval-ms`.
+
+The current schema allows `bookings.user_id` to be `NULL`; this implementation only creates bookings from authenticated customer requests and always sets the owner, without changing the supplied schema.
 
 Đặt vé dùng:
 
