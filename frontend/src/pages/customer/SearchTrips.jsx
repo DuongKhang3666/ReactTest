@@ -6,6 +6,7 @@ import TripCard from "../../components/common/TripCard";
 import Spinner from "../../components/common/Spinner";
 import ErrorState from "../../components/common/ErrorState";
 import EmptyState from "../../components/common/EmptyState";
+import RouteLabel from "../../components/common/RouteLabel";
 import { searchTripsQuery } from "../../queries/tripQueries";
 import { cityLabel } from "../../utils/cities";
 import { formatDate, formatPrice, toDateInputValue } from "../../utils/format";
@@ -42,7 +43,7 @@ export default function SearchTrips() {
     setParams(p);
   };
 
-  const title = from && to ? `${cityLabel(from)} → ${cityLabel(to)}` : "Tất cả chuyến xe";
+  const title = from && to ? <RouteLabel from={cityLabel(from)} to={cityLabel(to)} /> : "Tất cả chuyến xe";
 
   return (
     <div className="container page">
@@ -157,7 +158,7 @@ function TripResults({ trips }) {
         </div>
 
         {visible.length === 0 ? (
-          <EmptyState icon="🔍" title="Không có chuyến khớp bộ lọc">
+          <EmptyState icon="search" title="Không có chuyến khớp bộ lọc">
             <button type="button" className="btn btn--outline" onClick={reset}>Xóa bộ lọc</button>
           </EmptyState>
         ) : (

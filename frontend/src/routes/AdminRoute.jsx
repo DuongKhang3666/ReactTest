@@ -13,7 +13,7 @@ export default function AdminRoute() {
   if (!isAdmin) {
     return (
       <div className="container page">
-        <EmptyState icon="⛔" title="Không đủ quyền truy cập">
+        <EmptyState icon="lock" title="Không đủ quyền truy cập">
           Khu vực này chỉ dành cho quản trị viên.
         </EmptyState>
       </div>

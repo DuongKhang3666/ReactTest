@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import Icon from "./Icon";
 import { cityLabel } from "../../utils/cities";
 import { formatDuration, formatPrice, formatTime } from "../../utils/format";
 
@@ -22,7 +23,7 @@ export default function TripCard({ trip }) {
           </div>
         </div>
         <div className="muted trip-card__meta">
-          {bus.busType} · {route.departureStation} → {route.destinationStation}
+          {bus.busType} · {route.departureStation} <Icon name="arrow-right" size={13} className="route-label__arrow" /> {route.destinationStation}
         </div>
       </div>
       <div className="trip-card__side">

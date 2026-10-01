@@ -2,6 +2,8 @@ import { useQuery } from "@tanstack/react-query";
 import Spinner from "../../components/common/Spinner";
 import ErrorState from "../../components/common/ErrorState";
 import EmptyState from "../../components/common/EmptyState";
+import Icon from "../../components/common/Icon";
+import RouteLabel from "../../components/common/RouteLabel";
 import { dashboardQuery } from "../../queries/adminQueries";
 import { cityLabel } from "../../utils/cities";
 import { formatDate, formatDateTime, formatPrice } from "../../utils/format";
@@ -20,7 +22,8 @@ export default function Dashboard() {
       <div className="page__head">
         <h1>Dashboard</h1>
         <button type="button" className="btn btn--outline btn--sm" onClick={() => refetch()} disabled={isFetching}>
-          {isFetching ? "Đang làm mới..." : "↻ Làm mới"}
+          <Icon name="refresh" size={16} className={isFetching ? "icon--spin" : ""} />
+          {isFetching ? "Đang làm mới..." : "Làm mới"}
         </button>
       </div>
 
@@ -33,12 +36,12 @@ export default function Dashboard() {
 
 function DashboardContent({ data }) {
   const cards = [
-    { label: "Doanh thu", value: formatPrice(data.totalRevenue), icon: "💰" },
-    { label: "Tổng vé đặt", value: data.totalBookings, icon: "🎫" },
-    { label: "Chuyến xe", value: data.totalTrips, icon: "🗓️" },
-    { label: "Người dùng", value: data.totalUsers, icon: "👥" },
-    { label: "Xe", value: data.totalBuses, icon: "🚐" },
-    { label: "Tuyến", value: data.totalRoutes, icon: "🛣️" },
+    { label: "Doanh thu", value: formatPrice(data.totalRevenue), icon: "wallet" },
+    { label: "Tổng vé đặt", value: data.totalBookings, icon: "ticket" },
+    { label: "Chuyến xe", value: data.totalTrips, icon: "calendar" },
+    { label: "Người dùng", value: data.totalUsers, icon: "users" },
+    { label: "Xe", value: data.totalBuses, icon: "bus" },
+    { label: "Tuyến", value: data.totalRoutes, icon: "route" },
   ];
   const maxRevenue = Math.max(1, ...data.revenueLast7Days.map((d) => d.revenue));
   const statusTotal = Object.values(data.bookingsByStatus).reduce((a, b) => a + b, 0) || 1;
@@ -48,7 +51,7 @@ function DashboardContent({ data }) {
       <div className="grid grid--6 stats">
         {cards.map((c) => (
           <div className="card stat" key={c.label}>
-            <span className="stat__icon" aria-hidden="true">{c.icon}</span>
+            <span className="stat__icon"><Icon name={c.icon} size={22} /></span>
             <span className="muted">{c.label}</span>
             <strong>{c.value}</strong>
           </div>
@@ -92,7 +95,7 @@ function DashboardContent({ data }) {
         <section className="card">
           <h2>Chuyến sắp khởi hành</h2>
           {data.upcomingTrips.length === 0 ? (
-            <EmptyState icon="🗓️" title="Không có chuyến sắp tới" />
+            <EmptyState icon="calendar" title="Không có chuyến sắp tới" />
           ) : (
             <div className="table-wrap">
               <table className="table">
@@ -100,7 +103,7 @@ function DashboardContent({ data }) {
                 <tbody>
                   {data.upcomingTrips.map((t) => (
                     <tr key={t.id}>
-                      <td>{cityLabel(t.route.departureCity)} → {cityLabel(t.route.destinationCity)}</td>
+                      <td><RouteLabel from={cityLabel(t.route.departureCity)} to={cityLabel(t.route.destinationCity)} /></td>
                       <td>{formatDateTime(t.departureTime)}</td>
                       <td>{t.availableSeats}/{t.bus.seatCount}</td>
                     </tr>
@@ -114,7 +117,7 @@ function DashboardContent({ data }) {
         <section className="card">
           <h2>Vé đặt gần đây</h2>
           {data.recentBookings.length === 0 ? (
-            <EmptyState icon="🎫" title="Chưa có vé nào" />
+            <EmptyState icon="ticket" title="Chưa có vé nào" />
           ) : (
             <div className="table-wrap">
               <table className="table">

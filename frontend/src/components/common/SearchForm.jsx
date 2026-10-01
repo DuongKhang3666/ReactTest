@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { CITIES } from "../../utils/cities";
 import { toDateInputValue } from "../../utils/format";
+import Icon from "./Icon";
 
 /** Form tìm chuyến - dùng ở Home và SearchTrips. UI state (input) dùng useState. */
 export default function SearchForm({ initial = {}, onSubmit, submitLabel = "Tìm chuyến" }) {
@@ -33,7 +34,7 @@ export default function SearchForm({ initial = {}, onSubmit, submitLabel = "Tìm
           {CITIES.map((c) => <option key={c.value} value={c.value}>{c.label}</option>)}
         </select>
       </label>
-      <button type="button" className="search-form__swap" onClick={swap} aria-label="Đổi chiều đi/đến">⇄</button>
+      <button type="button" className="search-form__swap" onClick={swap} aria-label="Đổi chiều đi/đến" title="Đổi chiều đi/đến"><Icon name="swap" size={18} /></button>
       <label className="field">
         <span>Điểm đến</span>
         <select value={to} onChange={(e) => setTo(e.target.value)}>

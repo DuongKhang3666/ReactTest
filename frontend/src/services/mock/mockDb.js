@@ -135,7 +135,7 @@ export const buildDashboardStats = () => {
   const statuses = ["CONFIRMED", "CONFIRMED", "PENDING", "CANCELLED", "CONFIRMED"];
   const recentBookings = upcomingTrips.map((t, i) => ({
     id: 100 + i, bookingCode: `BK${20261000 + i * 37}`, customerName: names[i % 5],
-    route: `${cityLabel(t.route.departureCity)} → ${cityLabel(t.route.destinationCity)}`,
+    route: `${cityLabel(t.route.departureCity)} - ${cityLabel(t.route.destinationCity)}`,
     totalAmount: t.price * (1 + (i % 3)), status: statuses[i % 5], bookedAt: localISO(new Date(today.getTime() - i * 3600000 * 5)),
   }));
   return {
