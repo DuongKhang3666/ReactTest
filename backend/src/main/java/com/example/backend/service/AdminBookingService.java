@@ -61,7 +61,6 @@ public class AdminBookingService {
                 ticket.getPassengerPhone(),
                 ticket.getPrice(),
                 ticket.getStatus(),
-                ticket.getExpiresAt(),
                 ticket.getCancelledAt()
         );
     }

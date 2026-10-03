@@ -9,7 +9,6 @@ import com.example.backend.enums.BusStatus;
 import com.example.backend.enums.RouteStatus;
 import com.example.backend.enums.SeatStatus;
 import com.example.backend.enums.SeatType;
-import com.example.backend.enums.TicketStatus;
 import com.example.backend.enums.TripStatus;
 import com.example.backend.repository.SeatRepository;
 import com.example.backend.repository.TicketRepository;
@@ -29,6 +28,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -44,8 +44,8 @@ class SeatServiceTest {
     private SeatService seatService;
 
     @Test
-    void availabilityIsDerivedFromTicketsAndIgnoresExpiredHolds() {
-        Bus bus = new Bus("TST-002", "Sleeper", 4, null, BusStatus.ACTIVE);
+    void availabilityContainsReservedAndConfirmedBookingsAsOccupied() {
+        Bus bus = new Bus("TST-002", "Sleeper", 3, null, BusStatus.ACTIVE);
         setId(bus, 5L);
         Route route = new Route("A", "B", null, null, null, null, RouteStatus.ACTIVE);
         Trip trip = new Trip(route, bus, LocalDateTime.now().plusHours(2),
@@ -53,26 +53,22 @@ class SeatServiceTest {
         List<Seat> seats = List.of(
                 seat(1L, bus, "A01", SeatStatus.ACTIVE),
                 seat(2L, bus, "A02", SeatStatus.ACTIVE),
-                seat(3L, bus, "A03", SeatStatus.ACTIVE),
-                seat(4L, bus, "A04", SeatStatus.INACTIVE)
+                seat(3L, bus, "A03", SeatStatus.INACTIVE)
         );
         when(tripRepository.findById(20L)).thenReturn(Optional.of(trip));
-        when(ticketRepository.findAvailabilityRows(20L, List.of(TicketStatus.RESERVED, TicketStatus.CONFIRMED)))
-                .thenReturn(List.of(
-                        new Object[]{1L, TicketStatus.RESERVED, LocalDateTime.now().plusMinutes(2)},
-                        new Object[]{2L, TicketStatus.CONFIRMED, null},
-                        new Object[]{3L, TicketStatus.RESERVED, LocalDateTime.now().minusSeconds(1)}
-                ));
+        when(ticketRepository.findOccupiedSeatIds(20L, List.of(com.example.backend.enums.TicketStatus.RESERVED, com.example.backend.enums.TicketStatus.CONFIRMED)))
+                .thenReturn(List.of(2L));
         when(seatRepository.findByBusIdOrderByFloorNumberAscRowNumberAscColumnNumberAscSeatNumberAsc(5L))
                 .thenReturn(seats);
 
         Map<Long, SeatAvailability> availability = seatService.getAvailability(20L).stream()
                 .collect(Collectors.toMap(SeatAvailability::seatId, Function.identity()));
 
-        assertEquals("HELD", availability.get(1L).status());
+        assertEquals("AVAILABLE", availability.get(1L).status());
         assertEquals("BOOKED", availability.get(2L).status());
-        assertEquals("AVAILABLE", availability.get(3L).status());
-        assertEquals("INACTIVE", availability.get(4L).status());
+        assertEquals("INACTIVE", availability.get(3L).status());
+        verify(ticketRepository).findOccupiedSeatIds(
+                20L, List.of(com.example.backend.enums.TicketStatus.RESERVED, com.example.backend.enums.TicketStatus.CONFIRMED));
     }
 
     private Seat seat(Long id, Bus bus, String number, SeatStatus status) {
@@ -80,13 +76,13 @@ class SeatServiceTest {
                 .status(status).floorNumber(1).build();
     }
 
-        private void setId(Object entity, Long id) {
-                try {
-                        var idField = entity.getClass().getDeclaredField("id");
-                        idField.setAccessible(true);
-                        idField.set(entity, id);
-                } catch (ReflectiveOperationException exception) {
-                        throw new AssertionError(exception);
-                }
+    private void setId(Object entity, Long id) {
+        try {
+            var idField = entity.getClass().getDeclaredField("id");
+            idField.setAccessible(true);
+            idField.set(entity, id);
+        } catch (ReflectiveOperationException exception) {
+            throw new AssertionError(exception);
         }
+    }
 }

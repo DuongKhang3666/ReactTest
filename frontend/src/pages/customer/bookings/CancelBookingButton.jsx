@@ -8,6 +8,7 @@ function CancelBookingButton({ bookingId }) {
     mutationFn: () => cancelBooking(bookingId),
 
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["trip-seats"] });
       queryClient.invalidateQueries({
         queryKey: ["bookings", "me"],
       });
@@ -45,7 +46,7 @@ function CancelBookingButton({ bookingId }) {
       {cancelMutation.isError && (
         <p>
           Hủy booking thất bại:{" "}
-          {cancelMutation.error.message}
+          {cancelMutation.error.response?.data?.message ?? cancelMutation.error.message}
         </p>
       )}
 

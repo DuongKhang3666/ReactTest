@@ -54,14 +54,14 @@ public class Seat {
     @Builder.Default
     private SeatType seatType = SeatType.REGULAR;
 
-    @Column(name = "floor_number", nullable = false)
+    @Column(name = "floor_number", nullable = false, columnDefinition = "TINYINT UNSIGNED")
     @Builder.Default
     private Integer floorNumber = 1;
 
-    @Column(name = "row_number")
+    @Column(name = "`row_number`")
     private Integer rowNumber;
 
-    @Column(name = "column_number")
+    @Column(name = "`column_number`")
     private Integer columnNumber;
 
     @Enumerated(EnumType.STRING)

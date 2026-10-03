@@ -1,12 +1,13 @@
 package com.example.backend.exception;
 
+import com.example.backend.dto.error.ConflictSeat;
+import java.util.List;
+
 public class SeatConflictException extends RuntimeException {
-
-    public SeatConflictException(String message) {
+    private final List<ConflictSeat> conflictSeats;
+    public SeatConflictException(String message, List<ConflictSeat> conflictSeats) {
         super(message);
+        this.conflictSeats = List.copyOf(conflictSeats);
     }
-
-    public SeatConflictException(String message, Throwable cause) {
-        super(message, cause);
-    }
+    public List<ConflictSeat> getConflictSeats() { return conflictSeats; }
 }

@@ -27,12 +27,7 @@ import java.time.LocalDateTime;
 @Table(
         name = "bookings",
         uniqueConstraints = {
-                @UniqueConstraint(name = "uk_bookings_code", columnNames = "booking_code"),
-                @UniqueConstraint(name = "uk_bookings_id_trip", columnNames = {"id", "trip_id"}),
-                @UniqueConstraint(
-                        name = "uk_bookings_user_pending_trip",
-                        columnNames = {"user_id", "pending_trip_id"}
-                )
+                @UniqueConstraint(name = "uk_bookings_code", columnNames = "booking_code")
         },
         indexes = {
                 @Index(name = "idx_bookings_user", columnList = "user_id, booked_at"),
@@ -73,9 +68,6 @@ public class Booking {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
     private BookingStatus status = BookingStatus.PENDING;
-
-    @Column(name = "pending_trip_id", insertable = false, updatable = false)
-    private Long pendingTripId;
 
     @Column(name = "booked_at", nullable = false, updatable = false)
     private LocalDateTime bookedAt;

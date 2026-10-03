@@ -1,0 +1,249 @@
+.booking-summary {
+  width: 100%;
+
+  padding: 20px;
+
+  background: #ffffff;
+
+  border: 1px solid #e2e8f0;
+  border-radius: 15px;
+
+  box-shadow:
+    0 1px 2px rgba(15, 23, 42, 0.04),
+    0 3px 8px rgba(15, 23, 42, 0.04);
+}
+
+/* =========================
+   TITLE
+========================= */
+
+.booking-summary__title {
+  margin: 0 0 17px;
+
+  color: #1e293b;
+
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 700;
+}
+
+/* =========================
+   INFO
+========================= */
+
+.booking-summary__info {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.booking-summary__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 12px;
+
+  font-size: 11px;
+  line-height: 16px;
+}
+
+.booking-summary__row > span {
+  color: #94a3b8;
+}
+
+.booking-summary__row > strong {
+  color: #334155;
+
+  font-size: 10px;
+  line-height: 15px;
+  font-weight: 500;
+
+  text-align: right;
+  white-space: nowrap;
+}
+
+.booking-summary__row
+  .booking-summary__booking-code {
+  color: #2563eb;
+
+  font-size: 9px;
+  font-weight: 600;
+}
+
+/* =========================
+   DIVIDER
+========================= */
+
+.booking-summary__divider {
+  height: 1px;
+
+  margin: 16px 0;
+
+  border-top: 1px dashed #e2e8f0;
+}
+
+/* =========================
+   TOTAL
+========================= */
+
+.booking-summary__total {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.booking-summary__total span {
+  color: #64748b;
+
+  font-size: 11px;
+  line-height: 16px;
+  font-weight: 600;
+}
+
+.booking-summary__total strong {
+  color: #1e293b;
+
+  font-size: 17px;
+  line-height: 24px;
+  font-weight: 700;
+}
+
+/* =========================
+   STATUS
+========================= */
+
+.booking-summary__status {
+  margin-top: 17px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 10px;
+
+  color: #94a3b8;
+
+  font-size: 11px;
+  line-height: 16px;
+}
+
+/* =========================
+   ACTIONS
+========================= */
+
+.booking-summary__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  margin-top: 17px;
+}
+
+.booking-summary__button {
+  width: 100%;
+  height: 36px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+
+  padding: 0 12px;
+
+  border: 1px solid #dbe3ee;
+  border-radius: 9px;
+
+  background: #ffffff;
+  color: #475569;
+
+  font-size: 11px;
+  line-height: 16px;
+  font-weight: 500;
+
+  cursor: pointer;
+
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.booking-summary__button:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+.booking-summary__button:active {
+  transform: translateY(1px);
+}
+
+/* =========================
+   PRIMARY
+========================= */
+
+.booking-summary__button--primary {
+  color: #2563eb;
+
+  border-color: #93c5fd;
+
+  background: #ffffff;
+}
+
+.booking-summary__button--primary:hover {
+  background: #eff6ff;
+  border-color: #60a5fa;
+}
+
+/* =========================
+   DANGER
+========================= */
+
+.booking-summary__button--danger {
+  color: #ef4444;
+
+  border-color: #fecaca;
+
+  background: #ffffff;
+}
+
+.booking-summary__button--danger:hover {
+  background: #fef2f2;
+  border-color: #fca5a5;
+}
+
+/* =========================
+   ICON
+========================= */
+
+.booking-summary__button-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 15px;
+
+  font-size: 14px;
+  line-height: 1;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 900px) {
+  .booking-summary__actions {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 700px) {
+  .booking-summary {
+    padding: 17px;
+  }
+
+  .booking-summary__actions {
+    grid-template-columns: 1fr;
+  }
+}

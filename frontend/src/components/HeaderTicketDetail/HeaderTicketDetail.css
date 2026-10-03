@@ -1,0 +1,180 @@
+.ticket-detail-header {
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  padding: 0 180px;
+}
+
+.ticket-detail-header__left {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.ticket-detail-header__back {
+  width: 28px;
+  height: 36px;
+
+  margin-top: 3px;
+  padding: 0;
+
+  border: 0;
+  background: transparent;
+
+  color: #64748b;
+  font-size: 25px;
+  line-height: 36px;
+
+  cursor: pointer;
+}
+
+.ticket-detail-header__back:hover {
+  color: #1e293b;
+}
+
+.ticket-detail-header__title-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.ticket-detail-header__breadcrumb {
+  margin-bottom: 4px;
+
+  color: #94a3b8;
+  font-size: 13px;
+  line-height: 18px;
+}
+
+.ticket-detail-header__breadcrumb span {
+  margin: 0 6px;
+  color: #cbd5e1;
+}
+
+.ticket-detail-header__title-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ticket-detail-header__title-row h1 {
+  margin: 0;
+
+  color: #111827;
+  font-size: 22px;
+  line-height: 30px;
+  font-weight: 700;
+}
+
+/* =========================
+   STATUS
+========================= */
+
+.ticket-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  height: 23px;
+  padding: 0 9px;
+
+  border-radius: 999px;
+
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.ticket-status--confirmed {
+  color: #16a34a;
+  background: #f0fdf4;
+  border: 1px solid #a7f3d0;
+}
+
+.ticket-status__dot {
+  width: 5px;
+  height: 5px;
+
+  border-radius: 50%;
+  background: #22c55e;
+}
+
+/* =========================
+   PASSENGER
+========================= */
+
+.ticket-detail-header__passenger {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+
+  margin-right: 2px;
+}
+
+.ticket-detail-header__passenger-label {
+  color: #94a3b8;
+  font-size: 11px;
+  line-height: 16px;
+}
+
+.ticket-detail-header__passenger-info {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.ticket-detail-header__avatar {
+  width: 27px;
+  height: 27px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #2563eb;
+  color: #fff;
+
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.ticket-detail-header__passenger-name {
+  color: #334155;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 700px) {
+  .ticket-detail-header__passenger {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .ticket-detail-header {
+    margin-bottom: 18px;
+  }
+
+  .ticket-detail-header__title-row {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .ticket-detail-header__title-row h1 {
+    font-size: 19px;
+    line-height: 26px;
+  }
+
+  .ticket-detail-header__breadcrumb {
+    font-size: 12px;
+  }
+}

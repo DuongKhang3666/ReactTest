@@ -41,7 +41,7 @@ function MyBookingsPage() {
             <h2>{booking.bookingCode}</h2>
 
             <p>
-              Trạng thái: {booking.status}
+              Trạng thái: {booking.status === "PENDING" ? "Chờ admin xác nhận" : booking.status === "CONFIRMED" ? "Đã xác nhận" : "Đã hủy"}
             </p>
 
             <p>

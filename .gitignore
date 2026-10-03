@@ -19,4 +19,7 @@ backendJ2EE.drawio.svg
 AGENT_CHANGELOG.md
 
 # PostMan
-/backend/booking-test.postman_collection.json
+booking-test.postman_collection.json
+
+# IntelliJ IDEA
+.idea/

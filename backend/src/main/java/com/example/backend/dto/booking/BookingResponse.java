@@ -16,4 +16,12 @@ public record BookingResponse(
         LocalDateTime cancelledAt,
         List<TicketResponse> tickets
 ) {
+    @com.fasterxml.jackson.annotation.JsonProperty("message")
+    public String message() {
+        return switch (status) {
+            case PENDING -> "Request received; awaiting admin confirmation. No official ticket yet.";
+            case CONFIRMED -> "Booking confirmed by admin.";
+            case CANCELLED -> "Booking cancelled.";
+        };
+    }
 }

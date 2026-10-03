@@ -1,0 +1,268 @@
+.ticket-info {
+  overflow: hidden;
+
+  background: #ffffff;
+
+  border: 1px solid #e2e8f0;
+  border-radius: 15px;
+
+  box-shadow:
+    0 1px 2px rgba(15, 23, 42, 0.04),
+    0 3px 8px rgba(15, 23, 42, 0.04);
+}
+
+/* =========================
+   HEADER
+========================= */
+
+.ticket-info__header {
+  min-height: 85px;
+
+  padding: 18px 20px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  color: #ffffff;
+
+  background: linear-gradient(
+    135deg,
+    #2563eb 0%,
+    #174de5 100%
+  );
+}
+
+.ticket-info__trip-label {
+  margin-bottom: 4px;
+
+  color: rgba(255, 255, 255, 0.82);
+
+  font-size: 10px;
+}
+
+.ticket-info__route {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  font-size: 21px;
+  line-height: 28px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+}
+
+.ticket-info__route-arrow {
+  font-size: 21px;
+  font-weight: 400;
+  opacity: 0.9;
+}
+
+.ticket-info__departure {
+  text-align: right;
+}
+
+.ticket-info__departure-label {
+  margin-bottom: -2px;
+
+  color: rgba(255, 255, 255, 0.75);
+
+  font-size: 10px;
+}
+
+.ticket-info__departure-time {
+  font-size: 22px;
+  line-height: 26px;
+  font-weight: 700;
+}
+
+.ticket-info__departure-date {
+  color: rgba(255, 255, 255, 0.85);
+
+  font-size: 10px;
+  line-height: 15px;
+}
+
+/* =========================
+   BODY
+========================= */
+
+.ticket-info__body {
+  padding: 21px 20px 18px;
+}
+
+/* =========================
+   TIMELINE
+========================= */
+
+.ticket-info__timeline {
+  position: relative;
+}
+
+.ticket-info__timeline-item {
+  position: relative;
+
+  min-height: 43px;
+
+  display: flex;
+}
+
+.ticket-info__timeline-dot {
+  position: relative;
+
+  flex: 0 0 12px;
+
+  width: 12px;
+  height: 12px;
+
+  margin-top: 3px;
+
+  border-radius: 50%;
+
+  z-index: 2;
+}
+
+.ticket-info__timeline-dot--blue {
+  background: #3b82f6;
+  box-shadow: 0 0 0 2px #dbeafe;
+}
+
+.ticket-info__timeline-dot--green {
+  background: #22c55e;
+  box-shadow: 0 0 0 2px #dcfce7;
+}
+
+.ticket-info__timeline-content {
+  display: flex;
+  flex-direction: column;
+
+  margin-left: 10px;
+}
+
+.ticket-info__timeline-content strong {
+  color: #1e293b;
+
+  font-size: 13px;
+  line-height: 15px;
+}
+
+.ticket-info__timeline-content span {
+  margin-top: 1px;
+
+  color: #64748b;
+
+  font-size: 11px;
+  line-height: 16px;
+}
+
+.ticket-info__timeline-line {
+  width: 1px;
+  height: 22px;
+
+  margin-left: 6px;
+  margin-top: -1px;
+  margin-bottom: -1px;
+
+  background: #a7f3d0;
+}
+
+/* =========================
+   DIVIDER
+========================= */
+
+.ticket-info__divider {
+  height: 1px;
+
+  margin: 8px 0 13px;
+
+  background: #e2e8f0;
+}
+
+/* =========================
+   DETAILS
+========================= */
+
+.ticket-info__details {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+}
+
+.ticket-info__detail-column {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 25px;
+}
+
+.ticket-info__detail {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ticket-info__detail > span {
+  color: #94a3b8;
+
+  font-size: 9px;
+  line-height: 13px;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+}
+
+.ticket-info__detail > strong {
+  color: #0f172a;
+
+  font-size: 11px;
+  line-height: 16px;
+  font-weight: 500;
+
+  white-space: nowrap;
+}
+
+.ticket-info__booking-code {
+  color: #2563eb !important;
+  font-weight: 600 !important;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 700px) {
+  .ticket-info__header {
+    padding: 17px;
+  }
+
+  .ticket-info__body {
+    padding: 18px 17px;
+  }
+
+  .ticket-info__route {
+    font-size: 18px;
+  }
+
+  .ticket-info__details {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .ticket-info__detail-column {
+    gap: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .ticket-info__header {
+    min-height: 100px;
+  }
+
+  .ticket-info__departure-time {
+    font-size: 19px;
+  }
+
+  .ticket-info__detail > strong {
+    font-size: 10px;
+  }
+}

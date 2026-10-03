@@ -13,7 +13,6 @@ public record TicketResponse(
         String passengerPhone,
         BigDecimal price,
         TicketStatus status,
-        LocalDateTime expiresAt,
         LocalDateTime cancelledAt
 ) {
 }
