@@ -122,6 +122,7 @@ CREATE TABLE IF NOT EXISTS seats (
 -- -------------------------------------------------------------
 -- 6. BOOKINGS
 -- One booking can contain one or more tickets/seats.
+-- Xóa pending_trip_id vs unique uk_bookings_user_pending_trip để bỏ giới hạn mỗi user chỉ có một booking PENDING trên một trip
 -- -------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS bookings (
     id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
