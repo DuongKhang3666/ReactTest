@@ -4,6 +4,7 @@ import ProtectedRoute from "./ProtectedRoute";
 import AdminTripsPage from "../pages/admin/trips/AdminTripsPage";
 import MyBookingsPage from "../pages/customer/bookings/MyBookingsPage";
 import BookingDetailPage from "../pages/customer/bookings/BookingDetailPage";
+import BookingPage from "../pages/customer/booking/BookingPage";
 
 function AppRouter() {
   return (
@@ -14,6 +15,7 @@ function AppRouter() {
 
         {/* Customer */}
         <Route element={<ProtectedRoute role="CUSTOMER"/>} >
+          <Route path="/booking" element={<BookingPage />} />
           <Route path="/my-bookings" element={<MyBookingsPage />} />
           <Route path="/my-bookings/:bookingId" element={<BookingDetailPage />} />
         </Route>
