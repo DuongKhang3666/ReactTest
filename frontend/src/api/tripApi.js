@@ -1,23 +1,15 @@
 import axiosClient from "./axiosClient";
 
 export const searchTrips = ({
-  from,
-  to,
-  date,
-}) => {
+                              from, to, date,
+                            }) => {
   return axiosClient.get("/trips", {
     params: {
-      from,
-      to,
-      date,
+      from, to, date,
     },
   });
 };
 
 export const getTripById = (tripId) => {
   return axiosClient.get(`/trips/${tripId}`);
-};
-
-export const getTripSeats = (tripId) => {
-  return axiosClient.get(`/trips/${tripId}/seats`);
 };
