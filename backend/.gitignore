@@ -15,6 +15,7 @@ target/
 
 ### IntelliJ IDEA ###
 .idea
+.idea/
 *.iws
 *.iml
 *.ipr
@@ -31,3 +32,9 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# PostMan
+*.postman_collection.json
+!booking-test.postman_collection.json
+booking-test.postman_collection.json
+

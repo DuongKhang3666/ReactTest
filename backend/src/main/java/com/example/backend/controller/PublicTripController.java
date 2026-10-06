@@ -1,6 +1,8 @@
 package com.example.backend.controller;
 
+import com.example.backend.dto.seat.SeatAvailability;
 import com.example.backend.entity.Trip;
+import com.example.backend.service.SeatService;
 import com.example.backend.service.TripService;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
@@ -13,9 +15,11 @@ import java.util.List;
 public class PublicTripController {
 
     private final TripService tripService;
+    private final SeatService seatService;
 
-    public PublicTripController(TripService tripService) {
+    public PublicTripController(TripService tripService, SeatService seatService) {
         this.tripService = tripService;
+        this.seatService = seatService;
     }
 
     @GetMapping
@@ -36,5 +40,10 @@ public class PublicTripController {
     @GetMapping("/{id}")
     public Trip getTripById(@PathVariable Long id) {
         return tripService.getTripById(id);
+    }
+
+    @GetMapping("/{tripId}/seats")
+    public List<SeatAvailability> getTripSeats(@PathVariable Long tripId) {
+        return seatService.getAvailability(tripId);
     }
 }

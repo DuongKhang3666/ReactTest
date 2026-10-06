@@ -1,5 +1,6 @@
 package com.example.backend.entity;
 
+import com.example.backend.enums.TripStatus;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;

@@ -1,6 +1,6 @@
 package com.example.backend.service;
 
-import com.example.backend.entity.Role;
+import com.example.backend.enums.Role;
 import com.example.backend.entity.User;
 import com.example.backend.repository.UserRepository;
 import org.springframework.stereotype.Service;

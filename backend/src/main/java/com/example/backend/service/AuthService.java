@@ -3,7 +3,7 @@ package com.example.backend.service;
 import com.example.backend.dto.auth.AuthResponse;
 import com.example.backend.dto.auth.LoginRequest;
 import com.example.backend.dto.auth.RegisterRequest;
-import com.example.backend.entity.Role;
+import com.example.backend.enums.Role;
 import com.example.backend.entity.User;
 import com.example.backend.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;

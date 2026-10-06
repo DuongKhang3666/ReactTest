@@ -7,12 +7,19 @@ import BookingDetailPage from "../pages/customer/bookings/BookingDetailPage";
 import BookingPage from "../pages/customer/booking/BookingPage";
 
 function AppRouter() {
-  return (
-    <BrowserRouter>
-      <Routes>
-        {/* Public */}
-        <Route path="/" element={<h1>Bus Ticket System</h1>} />
+    return (
+        <BrowserRouter>
+            <Routes>
+                {/* Public */}
+                <Route path="/" element={<h1>Bus Ticket System</h1>} />
 
+                {/* Customer */}
+                <Route element={<ProtectedRoute role="CUSTOMER"/>} >
+                    <Route path="/booking" element={<BookingPage />} />
+                    <Route path="/my-bookings" element={<MyBookingsPage />} />
+                    <Route path="/my-bookings/:bookingId" element={<BookingDetailPage />} />
+
+                </Route>
         {/* Customer */}
         <Route element={<ProtectedRoute role="CUSTOMER"/>} >
           <Route path="/booking" element={<BookingPage />} />
@@ -20,13 +27,13 @@ function AppRouter() {
           <Route path="/my-bookings/:bookingId" element={<BookingDetailPage />} />
         </Route>
 
-        {/* Admin */}
-        <Route element={<ProtectedRoute role="ADMIN" />}>
-          <Route path="/admin/trips" element={<AdminTripsPage />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
-  );
+                {/* Admin */}
+                <Route element={<ProtectedRoute role="ADMIN" />}>
+                    <Route path="/admin/trips" element={<AdminTripsPage />} />
+                </Route>
+            </Routes>
+        </BrowserRouter>
+    );
 }
 
 export default AppRouter;
