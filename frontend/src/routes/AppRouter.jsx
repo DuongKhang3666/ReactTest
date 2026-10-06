@@ -20,12 +20,6 @@ function AppRouter() {
                     <Route path="/my-bookings/:bookingId" element={<BookingDetailPage />} />
 
                 </Route>
-        {/* Customer */}
-        <Route element={<ProtectedRoute role="CUSTOMER"/>} >
-          <Route path="/booking" element={<BookingPage />} />
-          <Route path="/my-bookings" element={<MyBookingsPage />} />
-          <Route path="/my-bookings/:bookingId" element={<BookingDetailPage />} />
-        </Route>
 
                 {/* Admin */}
                 <Route element={<ProtectedRoute role="ADMIN" />}>
