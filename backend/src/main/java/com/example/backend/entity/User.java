@@ -1,5 +1,6 @@
 package com.example.backend.entity;
 
+import com.example.backend.enums.Role;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;

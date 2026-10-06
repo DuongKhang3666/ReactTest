@@ -1,6 +1,6 @@
 package com.example.backend.dto.auth;
 
-import com.example.backend.entity.Role;
+import com.example.backend.enums.Role;
 
 public class AuthResponse {
 
