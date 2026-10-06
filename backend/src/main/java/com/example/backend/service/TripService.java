@@ -21,8 +21,6 @@ import java.util.List;
 @Service
 public class TripService {
 
-    private static final BigDecimal MAX_PRICE = new BigDecimal("9999999999.99");
-
     private final TripRepository tripRepository;
     private final RouteRepository routeRepository;
     private final BusRepository busRepository;
@@ -89,16 +87,21 @@ public class TripService {
         Long routeId = updatedTrip.getRoute().getId();
         Long busId = updatedTrip.getBus().getId();
 
+        // History also keeps its original bus/seat relationship after cancellation.
+        if (!existingTrip.getBus().getId().equals(busId) && hasBookingOrTicket(id)) {
+            throw new BadRequestException("Cannot change the bus of a trip that already has bookings or tickets");
+        }
+
         Route route = routeRepository.findById(routeId)
-                .orElseThrow(() -> new RuntimeException("Route not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Route not found: " + routeId));
 
         Bus bus = busRepository.findById(busId)
-                .orElseThrow(() -> new RuntimeException("Bus not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Bus not found: " + busId));
 
         existingTrip.setRoute(route);
         existingTrip.setBus(bus);
         existingTrip.setDepartureTime(updatedTrip.getDepartureTime());
-        existingTrip.setArrivalTime(updatedTrip.getArrivalTime());
+        existingTrip.setArrivalTime(updatedTrip.getArrivalTime());s
         existingTrip.setPrice(updatedTrip.getPrice());
         existingTrip.setStatus(updatedTrip.getStatus());
         existingTrip.setNotes(updatedTrip.getNotes());
@@ -106,14 +109,18 @@ public class TripService {
         Trip savedTrip = tripRepository.save(existingTrip);
 
         return tripRepository.findById(savedTrip.getId())
-                .orElseThrow(() -> new RuntimeException("Trip not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Trip not found: " + savedTrip.getId()));
     }
 
+    @Transactional
     public void deleteTrip(Long id) {
-        Trip trip = getTripById(id);
+        Trip trip = getTripForUpdate(id);
+        if (hasBookingOrTicket(id)) {
+            throw new BadRequestException("Cannot delete a trip that already has bookings or tickets");
+        }
         tripRepository.delete(trip);
     }
-  
+
     private Trip getTripForUpdate(Long id) {
         return tripRepository.findByIdForUpdate(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Trip not found: " + id));
@@ -158,7 +165,7 @@ public class TripService {
         }
 
         if (trip.getPrice() == null || trip.getPrice().signum() < 0) {
-            throw new RuntimeException("Price must be greater than or equal to 0");
+            throw new BadRequestException("Price must be greater than or equal to 0");
         }
     }
 

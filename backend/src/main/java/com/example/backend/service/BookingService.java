@@ -46,8 +46,6 @@ import java.util.UUID;
 @Service
 public class BookingService {
 
-    private static final BigDecimal MAX_TOTAL_AMOUNT = new BigDecimal("9999999999.99");
-
     @jakarta.persistence.PersistenceContext
     private jakarta.persistence.EntityManager entityManager;
 
@@ -146,9 +144,6 @@ public class BookingService {
                 ));
 
         BigDecimal totalAmount = trip.getPrice().multiply(BigDecimal.valueOf(orderedSeatIds.size()));
-        if (totalAmount.compareTo(MAX_TOTAL_AMOUNT) > 0) {
-            throw new BadRequestException("Booking total amount exceeds the supported maximum of 9999999999.99");
-        }
 
         Booking booking = new Booking();
         booking.setBookingCode(

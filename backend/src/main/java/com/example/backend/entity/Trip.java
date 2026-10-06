@@ -28,7 +28,7 @@ public class Trip {
     @Column(name = "arrival_time", nullable = false)
     private LocalDateTime arrivalTime;
 
-    @Column(nullable = false, precision = 12, scale = 2)
+    @Column(nullable = false)
     private BigDecimal price;
 
     @Enumerated(EnumType.STRING)
