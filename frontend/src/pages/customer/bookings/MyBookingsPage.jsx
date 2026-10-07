@@ -124,17 +124,8 @@ function MyBookingsPage() {
         ) : (
           <section className="booking-list">
             {bookings.map((booking) => {
-              /*
-               * BE2 trả BookingResponse.
-               * Tùy tên component của BookingResponse,
-               * danh sách ticket có thể là ticketResponses
-               * hoặc tickets. Dùng fallback để frontend
-               * không phụ thuộc cứng vào tên này.
-               */
-              const tickets =
-                booking.ticketResponses ??
-                booking.tickets ??
-                [];
+
+              const tickets = booking.tickets ?? [];
 
               const activeTicketCount =
                 tickets.filter(

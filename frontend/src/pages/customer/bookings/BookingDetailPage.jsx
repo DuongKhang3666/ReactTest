@@ -166,9 +166,6 @@ function BookingDetailPage() {
     );
   }
 
-  /*
-   * Chờ Trip Detail từ BE1.
-   */
   if (tripQuery.isPending) {
     return (
       <div className="booking-detail-page">

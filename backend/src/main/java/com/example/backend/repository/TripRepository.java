@@ -23,9 +23,10 @@ public interface TripRepository extends JpaRepository<Trip, Long> {
     @EntityGraph(attributePaths = {"route", "bus"})
     Optional<Trip> findById(Long id);
 
-    @Lock(LockModeType.PESSIMISTIC_WRITE)
-    @EntityGraph(attributePaths = {"route", "bus"})
-    @Query("select t from Trip t where t.id = :id")
+    @Query(
+        value = "SELECT * FROM trips WHERE id = :id FOR UPDATE",
+        nativeQuery = true
+    )
     Optional<Trip> findByIdForUpdate(@Param("id") Long id);
 
     @EntityGraph(attributePaths = {"route", "bus"})
