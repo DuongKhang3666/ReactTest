@@ -58,10 +58,10 @@ public class Seat {
     @Builder.Default
     private Integer floorNumber = 1;
 
-    @Column(name = "`row_number`")
+    @Column(name = "`seat_row`")
     private Integer rowNumber;
 
-    @Column(name = "`column_number`")
+    @Column(name = "`seat_column`")
     private Integer columnNumber;
 
     @Enumerated(EnumType.STRING)

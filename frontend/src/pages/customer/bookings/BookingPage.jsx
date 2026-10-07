@@ -1,7 +1,7 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
-
+import { createBooking } from "../../../api/bookingApi";
 import { getTripById } from "../../../api/tripApi";
 
 import "./BookingPage.css";
@@ -31,6 +31,16 @@ function BookingPage() {
     queryKey: ["trip", tripId],
     queryFn: () => getTripById(tripId),
     enabled: Boolean(tripId),
+  });
+
+  const createMutation = useMutation({
+    mutationFn: createBooking,
+
+    onSuccess: (response) => {
+      const booking = response.data;
+
+      navigate(`/my-bookings/${booking.id}`);
+    },
   });
 
   if (!tripId || !Array.isArray(selectedSeatIds)) {
@@ -121,15 +131,13 @@ function BookingPage() {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    console.log("Booking draft:", {
+    const payload = {
       tripId,
-      selectedSeatIds,
+      seatIds: selectedSeatIds,
       passengers,
-    });
+    };
 
-    alert(
-      "Thông tin booking đã sẵn sàng. Chờ API Booking từ BE2.",
-    );
+    createMutation.mutate(payload);
   };
 
   return (
@@ -325,6 +333,18 @@ function BookingPage() {
             </form>
           </section>
         </div>
+
+        {createMutation.isPending && (
+          <p>Đang tạo booking...</p>
+        )}
+
+        {createMutation.isError && (
+          <p>
+            Tạo booking thất bại:{" "}
+            {createMutation.error?.message}
+          </p>
+        )}
+                
       </div>
     </div>
   );
