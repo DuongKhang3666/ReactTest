@@ -2,9 +2,16 @@
 import Button from "./Button";
 import "./common.css";
 
-export default function PageHeader({title, subtitle = "HỆ THỐNG ĐẶT VÉ XE", onReload, onCreate, }) {
+export default function PageHeader({
+    title,
+    subtitle = "HỆ THỐNG ĐẶT VÉ XE",
+    onReload,
+    onCreate,
+    createLabel = "Tạo mới",
+    showCreate = true,
+}) {
     return (
-        <div className="page-header">
+        <div className="page-header app-page-header">
             {/* 2 Chữ trên tiêu đề */}
             <div className="page-header-info">
                 <div className="page-header-subtitle">
@@ -25,12 +32,15 @@ export default function PageHeader({title, subtitle = "HỆ THỐNG ĐẶT VÉ X
                     Tải lại
                 </Button>
 
-                <Button className="create"
-                    variant="primary"
-                    onClick={onCreate}
-                >
-                    Tạo xe
-                </Button>
+                {showCreate && (
+                    <Button
+                        className="create"
+                        variant="primary"
+                        onClick={onCreate}
+                    >
+                        {createLabel}
+                    </Button>
+                )}
             </div>
         </div>
     );

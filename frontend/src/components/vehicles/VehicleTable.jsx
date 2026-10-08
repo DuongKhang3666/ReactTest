@@ -1,6 +1,5 @@
-
 import VehicleRow from "./VehicleRow";
-import "./vehicle.css";
+import "./Vehicle.css";
 
 export default function VehicleTable({ vehicles, onView, onEdit, onDelete }) {
     return (

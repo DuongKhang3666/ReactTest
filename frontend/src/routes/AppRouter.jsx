@@ -9,7 +9,7 @@ import SeatsPage from "../pages/customer/seats/SeatsPage";
 import AdminLayout from "../layouts/Admin/AdminLayout";
 import VehiclesPage from "../pages/admin/vihicle/VehiclesPage.jsx";
 import RoutesPage from "../pages/admin/routes/RoutesPage.jsx";
-// import UsersPage from "../pages/admin/personal/UsersPage.jsx";
+import UsersPage from "../pages/admin/personal/UsersPage.jsx";
 
 function AppRouter() {
     return (
@@ -20,7 +20,7 @@ function AppRouter() {
                 <Route path = "/" element={<AdminLayout />}>
                     <Route path="admin/vehicles" element={<VehiclesPage />} />
                     <Route path="admin/routes" element={<RoutesPage />} />
-                    {/* <Route path="admin/users" element={<UsersPage />} /> */}
+                    <Route path="admin/users" element={<UsersPage />} />
                 </Route>
               
                 {/* Customer */}

@@ -1,16 +1,19 @@
 import StatusBadge from "../../../components/common/StatusBadge";
 import trash from "../../../assets/trash.svg";
 
+// format -> dd/mm/yyyy
 function formatDate(value) {
     if (!value) {
         return "—";
     }
 
     const date = new Date(value);
+    // nếu date ko đúng typedata thì sẽ trả NaN
     if (Number.isNaN(date.getTime())) {
         return "—";
     }
 
+    // thêm số 0 vào những số dưới 10
     const pad = (part) => String(part).padStart(2, "0");
     return `${pad(date.getDate())}/${pad(date.getMonth() + 1)}/${date.getFullYear()} · ${pad(date.getHours())}:${pad(date.getMinutes())}`;
 }

@@ -1,14 +1,12 @@
+import { useState } from "react";
 import PageHeader from "../../../components/common/PageHeader";
-import VehicleTable from "../../../components/vehicle/VehicleTable";
-import VehicleModal from "../../../components/vehicle/VehicleModal";
+import VehicleTable from "../../../components/vehicles/VehicleTable";
 import VehicleDetailScreen from "./VehicleDetailScreen";
 import VehicleCreateScreen from "./VehicleCreateScreen";
-import { useState } from "react";
-import "./VehiclesPage.css";
+import VehicleEditScreen from "./VehicleEditScreen";
+import DeleteConfirmModal from "../../../components/common/DeleteConfirmModal";
 import "./VehicleScreens.css";
 
-// Dữ liệu xe mẫu ban đầu.
-// Sau này phần này sẽ được thay bằng dữ liệu lấy từ API/backend.
 const initialVehicles = [
     {
         id: "XE-001",
@@ -51,186 +49,153 @@ const initialVehicles = [
 ];
 
 export default function VehiclesPage() {
-    // State lưu danh sách xe hiện tại bằng initialVehicles.
     const [vehicles, setVehicles] = useState(initialVehicles);
-
-    // State kiểm tra Modal đang mở hay đóng. (false=đóng, true=mở)
-    const [modalOpen, setModalOpen] = useState(false);
-
-    // Lưu chiếc xe đang được chọn để EDIT.
     const [selectedVehicle, setSelectedVehicle] = useState(null);
     const [activeScreen, setActiveScreen] = useState(null);
+    const [vehicleToDelete, setVehicleToDelete] = useState(null);
 
-    // Được gọi khi user bấm nút "Thêm xe".
-    const handleCreate = () => {
-        setActiveScreen({ type: "create" });
-        setSelectedVehicle(null);
-    };
-
-    // Được gọi khi user bấm nút "Sửa" ở một chiếc xe.
-    const handleEdit = (vehicle) => {
-        // Lưu chiếc xe đang được sửa.
-        setSelectedVehicle(vehicle);
-        // Mở Modal.
-        setModalOpen(true);
-    };
-
-    // Được gọi khi user bấm "Xem" một chiếc xe.
-    const handleView = (vehicle) => {
-        setActiveScreen({ type: "detail", vehicle });
-    };
-
-    // Được gọi khi user bấm "Xóa" một chiếc xe.
-    const handleDelete = (vehicle) => {
-        // Hiện popup xác nhận trước khi xóa.
-        const confirmed = window.confirm(
-            `Bạn có chắc muốn xóa xe ${vehicle.id}?`
-        );
-
-        // Nếu user bấm Cancel
-        if (!confirmed) {
-            return false;
-        }
-
-        // Nếu user bấm OK:
-        // prev = danh sách vehicles hiện tại.
-        // filter() tạo ra một danh sách mới,
-        // chỉ giữ lại những xe KHÔNG có id bằng xe cần xóa.
-        setVehicles((prev) =>
-            prev.filter((item) => item.id !== vehicle.id)
-        );
-        return true;
-    };
-
-    // Hàm này được gọi khi user submit VehicleModal.
-    // formData là dữ liệu user nhập trong form.
-    const handleSubmit = (formData) => {
-        // Nếu selectedVehicle khác null
-        // -> user đang chỉnh sửa một xe đã tồn tại.
-        // case đang Edit xe có sẵn.
-        if (selectedVehicle) {
-            setVehicles((prev) =>
-                prev.map((vehicle) =>
-                    vehicle.id === selectedVehicle.id
-
-                        // Nếu đúng ghi đè bằng dữ liệu mới từ form.
-                        ? {
-                            ...vehicle,
-                            ...formData,
-                            updatedAt: new Date().toISOString(),
-                        }
-
-                        // Nếu không phải xe đang sửa:
-                        // giữ nguyên.
-                        : vehicle
-                )
-            );
-
-        } else {
-            const nextId = Math.max(
-                0,
-                ...vehicles.map((vehicle) => Number(vehicle.id.replace("XE-", "")) || 0)
-            ) + 1;
-            const timestamp = new Date().toISOString();
-            const newVehicle = {
-                id: `XE-${String(nextId).padStart(3, "0")}`,
-                ...formData,
-                createdAt: timestamp,
-                updatedAt: timestamp,
-            };
-
-            // Thêm xe mới vào cuối danh sách.
-            setVehicles((prev) => [
-                ...prev,
-                newVehicle,
-            ]);
-        }
-
-        // đóng Modal.
-        setModalOpen(false);
-        // Reset xe đang chọn.
+    const handleBack = () => {
         setSelectedVehicle(null);
         setActiveScreen(null);
     };
 
-    const handleDetailDelete = (vehicle) => {
-        if (handleDelete(vehicle)) {
-            setActiveScreen(null);
-        }
+    const handleCreate = () => {
+        setSelectedVehicle(null);
+        setActiveScreen({ type: "create" });
     };
 
-    // Được gọi khi user bấm nút reload trên PageHeader.
+    const handleEdit = (vehicle) => {
+        setSelectedVehicle(vehicle);
+        setActiveScreen({ type: "edit", vehicle });
+    };
+
+    const handleView = (vehicle) => {
+        setActiveScreen({ type: "detail", vehicle });
+    };
+
+    // Mở popup xác nhận.
+    const handleDelete = (vehicle) => {
+        setVehicleToDelete(vehicle);
+    };
+
+    // Xóa sau khi xác nhận trong popup.
+    const handleConfirmDelete = () => {
+        if (!vehicleToDelete) return;
+
+        setVehicles((prev) =>
+            prev.filter((vehicle) => vehicle.id !== vehicleToDelete.id)
+        );
+
+        if (
+            activeScreen?.type === "detail" &&
+            activeScreen.vehicle.id === vehicleToDelete.id
+        ) {
+            handleBack();
+        }
+
+        setVehicleToDelete(null);
+    };
+
+    const handleSubmit = (formData) => {
+        const timestamp = new Date().toISOString();
+
+        if (selectedVehicle) {
+            setVehicles((prev) =>
+                prev.map((vehicle) =>
+                    vehicle.id === selectedVehicle.id
+                        ? {
+                            ...vehicle,
+                            ...formData,
+                            updatedAt: timestamp,
+                        }
+                        : vehicle
+                )
+            );
+        } else {
+            setVehicles((prev) => {
+                const nextId =
+                    Math.max(
+                        0,
+                        ...prev.map(
+                            (vehicle) =>
+                                Number(vehicle.id.replace("XE-", "")) || 0
+                        )
+                    ) + 1;
+
+                const newVehicle = {
+                    ...formData,
+                    id: `XE-${String(nextId).padStart(3, "0")}`,
+                    createdAt: timestamp,
+                    updatedAt: timestamp,
+                };
+
+                return [...prev, newVehicle];
+            });
+        }
+
+        handleBack();
+    };
+
     const handleReload = () => {
         setVehicles(initialVehicles);
     };
 
+    let screen;
+
     if (activeScreen?.type === "detail") {
-        return (
+        screen = (
             <VehicleDetailScreen
                 vehicle={activeScreen.vehicle}
-                onBack={() => setActiveScreen(null)}
-                onDelete={() => handleDetailDelete(activeScreen.vehicle)}
+                onBack={handleBack}
+                onDelete={() => handleDelete(activeScreen.vehicle)}
             />
         );
-    }
-
-    if (activeScreen?.type === "create") {
-        return (
+    } else if (activeScreen?.type === "create") {
+        screen = (
             <VehicleCreateScreen
-                onCancel={() => setActiveScreen(null)}
+                onCancel={handleBack}
                 onSubmit={handleSubmit}
             />
+        );
+    } else if (activeScreen?.type === "edit") {
+        screen = (
+            <VehicleEditScreen
+                vehicle={activeScreen.vehicle}
+                onCancel={handleBack}
+                onSubmit={handleSubmit}
+            />
+        );
+    } else {
+        screen = (
+            <div className="vehicles-page">
+                <PageHeader
+                    title="Quản lý xe"
+                    onReload={handleReload}
+                    onCreate={handleCreate}
+                    createLabel="Tạo xe"
+                />
+
+                <div className="vehicle-card">
+                    <VehicleTable
+                        vehicles={vehicles}
+                        onView={handleView}
+                        onEdit={handleEdit}
+                        onDelete={handleDelete}
+                    />
+                </div>
+            </div>
         );
     }
 
     return (
-        <div className="vehicles-page">
-            <PageHeader
-                title="Quản lý xe"
-                onReload={handleReload} // hàm chạy khi bấm Reload.
-                onCreate={handleCreate} // hàm chạy khi bấm Thêm xe.
+        <>
+            {screen}
+            <DeleteConfirmModal
+                open={vehicleToDelete !== null}
+                itemName={`xe ${vehicleToDelete?.id ?? ""}`}
+                onCancel={() => setVehicleToDelete(null)}
+                onConfirm={handleConfirmDelete}
             />
-
-            {/* Bảng xe */}
-            <div className="vehicle-card">
-                <VehicleTable
-                    vehicles={vehicles}
-                    onView={handleView}
-                    onEdit={handleEdit}
-                    onDelete={handleDelete}
-                />
-            </div>
-
-
-            {/* 
-                VehicleModal chịu trách nhiệm form Create/Edit.
-
-                open:
-                    Modal mở hay đóng.
-
-                vehicle:
-                    null -> Create
-                    object -> Edit
-
-                onClose:
-                    đóng Modal.
-
-                onSubmit:
-                    submit form -> gọi handleSubmit().
-            */}
-            <VehicleModal
-                open={modalOpen}
-                vehicle={selectedVehicle}
-
-                onClose={() => {
-                    // Đóng Modal.
-                    setModalOpen(false);
-                    // Bỏ chiếc xe đang chọn.
-                    setSelectedVehicle(null);
-                }}
-                onSubmit={handleSubmit}
-            />
-
-        </div>
+        </>
     );
 }

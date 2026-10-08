@@ -12,7 +12,7 @@
 
 .vehicle-table {
     width: 100%;
-    min-width: 960px;
+    min-width: 1080px;
     table-layout: fixed;
     border-collapse: collapse;
     border-spacing: 0;
@@ -23,25 +23,27 @@
 
 .vehicle-column-id,
 .vehicle-column-seats {
-    width: 9.65%;
+    width: 10%;
 }
 
-.vehicle-column-plate,
-.vehicle-column-status {
-    width: 14.85%;
+.vehicle-column-plate {
+    width: 16%;
 }
 
 .vehicle-column-type {
-    width: 18.55%;
+    width: 24%;
+}
+
+.vehicle-column-status {
+    width: 18%;
 }
 
 .vehicle-column-actions {
-    width: 32.45%;
+    width: 22%;
 }
 
 .vehicle-table th,
 .vehicle-table td {
-    padding: 12px 15px;
     border: 0;
     border-bottom: 1px solid #eaf0f7;
     text-align: left;
@@ -50,8 +52,7 @@
 
 .vehicle-table th {
     height: 40px;
-    padding-top: 10px;
-    padding-bottom: 10px;
+    padding: 10px 15px;
     background: #f7f9fc;
     color: #64748b;
     font-size: 10px;
@@ -61,9 +62,13 @@
 
 .vehicle-table td {
     height: 56px;
-    padding-top: 11px;
-    padding-bottom: 11px;
+    padding: 11px 15px;
     overflow-wrap: anywhere;
+}
+
+.vehicle-table th:last-child,
+.vehicle-table td:last-child {
+    text-align: center;
 }
 
 .vehicle-table tbody tr:last-child td {
@@ -107,7 +112,7 @@
 .vehicle-row-actions {
     display: flex;
     align-items: center;
-    justify-content: flex-end;
+    justify-content: center;
     gap: 6px;
 }
 
@@ -120,7 +125,7 @@
     min-width: 60px;
     height: 32px;
     margin: 0;
-    padding: 0 10px;
+    padding: 0 9px;
     border: 1px solid #d2dcef;
     border-radius: 8px;
     background: #ffffff;
@@ -170,4 +175,3 @@
     text-align: center;
     color: #64748b;
 }
-
