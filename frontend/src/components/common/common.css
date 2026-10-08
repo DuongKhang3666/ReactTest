@@ -1,0 +1,42 @@
+/* =========================================================
+   Page Header
+   ========================================================= */
+.page-header-subtitle {
+    color: rgb(76, 76, 248);
+    font-weight: bold;
+}
+
+/* .page-header-actions button {
+    border-radius: 15px;
+    border: 1px solid rgb(138, 138, 138);
+    margin: 0 5px;
+    width: 100px;
+    height: 50px;
+} */
+
+.reload { 
+    background-color: white;
+    color: black;
+}
+
+.create { 
+    background-color: rgb(19, 112, 243);
+    color: white;
+}
+
+/* =========================================================
+   Button
+   ========================================================= */
+.button {
+    border-radius: 15px;
+    border: 1px solid rgb(138, 138, 138);
+    margin: 0 5px;
+    width: 100px;
+    height: 50px;
+    cursor: pointer;
+}
+
+.action-icon {
+    width: 20px;
+    height: 20px;
+}

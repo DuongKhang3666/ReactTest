@@ -1,0 +1,173 @@
+/* =========================================================
+   VEHICLE TABLE
+   ========================================================= */
+.vehicle-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    background: #ffffff;
+    border: 1px solid #dfe6f1;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgb(30 58 95 / 4%);
+}
+
+.vehicle-table {
+    width: 100%;
+    min-width: 960px;
+    table-layout: fixed;
+    border-collapse: collapse;
+    border-spacing: 0;
+    color: #234572;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.vehicle-column-id,
+.vehicle-column-seats {
+    width: 9.65%;
+}
+
+.vehicle-column-plate,
+.vehicle-column-status {
+    width: 14.85%;
+}
+
+.vehicle-column-type {
+    width: 18.55%;
+}
+
+.vehicle-column-actions {
+    width: 32.45%;
+}
+
+.vehicle-table th,
+.vehicle-table td {
+    padding: 12px 15px;
+    border: 0;
+    border-bottom: 1px solid #eaf0f7;
+    text-align: left;
+    vertical-align: middle;
+}
+
+.vehicle-table th {
+    height: 40px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    background: #f7f9fc;
+    color: #64748b;
+    font-size: 10px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.vehicle-table td {
+    height: 56px;
+    padding-top: 11px;
+    padding-bottom: 11px;
+    overflow-wrap: anywhere;
+}
+
+.vehicle-table tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+
+.vehicle-table .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 8px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 16px;
+    white-space: nowrap;
+}
+
+.vehicle-table .status-badge-active {
+    background: #e6f7f1;
+    color: #00966d;
+}
+
+.vehicle-table .status-badge-inactive {
+    background: #f1f3f7;
+    color: #64748b;
+}
+
+.vehicle-table .status-dot {
+    width: 6px;
+    height: 6px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background: currentColor;
+}
+
+/* =========================================================
+   VEHICLE ROW
+   ========================================================= */
+.vehicle-row-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 6px;
+}
+
+.vehicle-action-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    gap: 7px;
+    min-width: 60px;
+    height: 32px;
+    margin: 0;
+    padding: 0 10px;
+    border: 1px solid #d2dcef;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #234572;
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 1;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+.vehicle-action-button:hover {
+    background: #f7f9fc;
+    border-color: #a8bddb;
+}
+
+.vehicle-action-button:focus-visible {
+    outline: 2px solid #2563eb;
+    outline-offset: 2px;
+}
+
+.vehicle-action-delete {
+    border-color: #dc2626;
+    background: #dc2626;
+    color: #ffffff;
+    font-weight: 600;
+}
+
+.vehicle-action-delete:hover {
+    border-color: #b91c1c;
+    background: #b91c1c;
+}
+
+.vehicle-action-icon {
+    width: 13px;
+    height: 13px;
+    flex-shrink: 0;
+    object-fit: contain;
+}
+
+.vehicle-action-delete .vehicle-action-icon {
+    filter: brightness(0) invert(1);
+}
+
+.vehicle-table .vehicle-empty {
+    height: 120px;
+    text-align: center;
+    color: #64748b;
+}
+
