@@ -117,11 +117,17 @@ public class BookingService {
 
         Map<Long, Seat> seats = lockAndValidateSeats(trip, orderedSeatIds);
 
+        
+        List<String> activeStatuses = List.of(
+                TicketStatus.RESERVED.name(),
+                TicketStatus.CONFIRMED.name()
+        );
+
         List<Long> conflictingSeatIds =
                 ticketRepository.findOccupiedForSeatsForUpdate(
                                 trip.getId(),
                                 orderedSeatIds,
-                                List.of(TicketStatus.RESERVED, TicketStatus.CONFIRMED)
+                                activeStatuses
                         )
                         .stream()
                         .map(ticket -> ticket.getSeat().getId())
