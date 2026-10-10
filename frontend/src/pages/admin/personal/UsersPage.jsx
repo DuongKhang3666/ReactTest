@@ -2,76 +2,44 @@ import { useState } from "react";
 import PageHeader from "../../../components/common/PageHeader";
 import UserTable from "../../../components/UsersManagement/UserTable";
 import UserDetailScreen from "./UserDetailScreen";
+import { useUpdateUserRole, useUsers } from "../../../hooks/useUsers";
 import "./UsersPage.css";
 
-const initialUsers = [
-    {
-        id: "ND-001",
-        username: "minhanh",
-        email: "minhanh@example.com",
-        fullName: "Nguyễn Minh Anh",
-        phone: "0901 234 567",
-        role: "CUSTOMER",
-    },
-    {
-        id: "ND-002",
-        username: "hoangnam",
-        email: "hoangnam@example.com",
-        fullName: "Trần Hoàng Nam",
-        phone: "0912 345 678",
-        role: "CUSTOMER",
-    },
-    {
-        id: "ND-003",
-        username: "admin01",
-        email: "admin@vexanh.vn",
-        fullName: "Lê Ngọc Hà",
-        phone: "0988 123 456",
-        role: "ADMIN",
-    },
-    {
-        id: "ND-004",
-        username: "thuyduong",
-        email: "thuyduong@example.com",
-        fullName: "Chưa có thông tin",
-        phone: "Chưa có thông tin",
-        role: "CUSTOMER",
-    },
-    {
-        id: "ND-005",
-        username: "quocbao",
-        email: "bao.q@example.com",
-        fullName: "Phạm Quốc Bảo",
-        phone: "0933 456 789",
-        role: "CUSTOMER",
-    },
-];
-
 export default function UsersPage() {
-    const [users, setUsers] = useState(initialUsers);
+    const usersQuery = useUsers();
+    const updateRoleMutation = useUpdateUserRole();
     const [viewedUserId, setViewedUserId] = useState(null);
+    const users = usersQuery.data ?? [];
     const viewedUser = users.find((user) => user.id === viewedUserId) ?? null;
 
-    const handleRoleChange = (userId, role) => {
-        setUsers((current) =>
-            current.map((user) =>
-                user.id === userId ? { ...user, role } : user
-            )
+    if (usersQuery.isPending) return <p role="status">Đang tải danh sách người dùng...</p>;
+
+    if (usersQuery.isError) {
+        return (
+            <section className="users-page">
+                <p role="alert">Không thể tải danh sách người dùng: {usersQuery.error.message}</p>
+                <button type="button" onClick={() => usersQuery.refetch()}>Thử lại</button>
+            </section>
         );
-    };
+    }
 
     return (
         <div className="users-page">
             <PageHeader
                 title="Quản lý người dùng"
-                onReload={() => setUsers(initialUsers)}
+                onReload={() => usersQuery.refetch()}
                 showCreate={false}
             />
+            {updateRoleMutation.isError && (
+                <p role="alert">Cập nhật vai trò thất bại: {updateRoleMutation.error.message}</p>
+            )}
             <div className="users-card">
                 <UserTable
                     users={users}
                     onView={(user) => setViewedUserId(user.id)}
-                    onRoleChange={handleRoleChange}
+                    onRoleChange={(userId, role) =>
+                        updateRoleMutation.mutate({ userId, role })
+                    }
                 />
             </div>
             <UserDetailScreen

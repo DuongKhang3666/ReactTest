@@ -1,49 +1,16 @@
-import { useEffect, useState } from "react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-
-import {
-  getAdminTripById,
-  updateAdminTrip,
-} from "../../../api/adminTripApi";
-import { getAdminRoutes } from "../../../api/adminRouteApi";
-import { getAdminBuses } from "../../../api/adminBusApi";
+import { useState } from "react";
+import { useBuses } from "../../../hooks/useBuses";
+import { useRoutes } from "../../../hooks/useRoutes";
+import { useAdminTrip, useUpdateAdminTrip } from "../../../hooks/useTrips";
 
 function EditTripForm({ tripId, onClose }) {
-  const queryClient = useQueryClient();
-
-  const [form, setForm] = useState({
-    routeId: "",
-    busId: "",
-    departureTime: "",
-    arrivalTime: "",
-    price: "",
-    status: "SCHEDULED",
-    notes: "",
-  });
-
-  const tripQuery = useQuery({
-    queryKey: ["admin", "trips", tripId],
-    queryFn: () => getAdminTripById(tripId),
-  });
-
-  const routesQuery = useQuery({
-    queryKey: ["admin", "routes"],
-    queryFn: getAdminRoutes,
-  });
-
-  const busesQuery = useQuery({
-    queryKey: ["admin", "buses"],
-    queryFn: getAdminBuses,
-  });
-
-  useEffect(() => {
-    if (!tripQuery.data) {
-      return;
-    }
-
-    const trip = tripQuery.data.data;
-
-    setForm({
+  const tripQuery = useAdminTrip(tripId);
+  const routesQuery = useRoutes();
+  const busesQuery = useBuses();
+  const updateMutation = useUpdateAdminTrip(tripId);
+  const [formOverride, setFormOverride] = useState(null);
+  const trip = tripQuery.data;
+  const form = formOverride ?? (trip ? {
       routeId: String(trip.route.id),
       busId: String(trip.bus.id),
       departureTime: trip.departureTime.slice(0, 16),
@@ -51,29 +18,21 @@ function EditTripForm({ tripId, onClose }) {
       price: String(trip.price),
       status: trip.status,
       notes: trip.notes ?? "",
+    } : {
+      routeId: "",
+      busId: "",
+      departureTime: "",
+      arrivalTime: "",
+      price: "",
+      status: "SCHEDULED",
+      notes: "",
     });
-  }, [tripQuery.data]);
-
-  const updateMutation = useMutation({
-    mutationFn: (payload) => updateAdminTrip(tripId, payload),
-
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["admin", "trips"],
-      });
-
-      queryClient.invalidateQueries({
-        queryKey: ["admin", "trips", tripId],
-      });
-
-      onClose();
-    },
-  });
 
   const handleChange = (event) => {
     const { name, value } = event.target;
 
-    setForm((current) => ({
+    setFormOverride((current) => ({
+      ...(current ?? form),
       ...current,
       [name]: value,
     }));
@@ -96,7 +55,7 @@ function EditTripForm({ tripId, onClose }) {
       price: Number(form.price),
       status: form.status,
       notes: form.notes,
-    });
+    }, { onSuccess: onClose });
   };
 
   if (
@@ -115,8 +74,8 @@ function EditTripForm({ tripId, onClose }) {
     return <p>Không thể tải dữ liệu Trip.</p>;
   }
 
-  const routes = routesQuery.data.data;
-  const buses = busesQuery.data.data;
+  const routes = routesQuery.data;
+  const buses = busesQuery.data;
 
   return (
     <form className="trip-form" onSubmit={handleSubmit}>

@@ -1,8 +1,8 @@
-import { useQuery, useMutation } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { createBooking } from "../../../api/bookingApi";
-import { getTripById } from "../../../api/tripApi";
+import { useTrip } from "../../../hooks/useTrips";
 
 import "./BookingPage.css";
 
@@ -27,11 +27,7 @@ function BookingPage() {
   const tripId = selection?.tripId;
   const selectedSeatIds = selection?.selectedSeatIds;
 
-  const tripQuery = useQuery({
-    queryKey: ["trip", tripId],
-    queryFn: () => getTripById(tripId),
-    enabled: Boolean(tripId),
-  });
+  const tripQuery = useTrip(tripId);
 
   const createMutation = useMutation({
     mutationFn: createBooking,
@@ -107,7 +103,7 @@ function BookingPage() {
     );
   }
 
-  const trip = tripQuery.data.data;
+  const trip = tripQuery.data;
 
   const updatePassenger = (
     index,

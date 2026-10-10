@@ -5,12 +5,12 @@ import {
 } from "@tanstack/react-query";
 import { useParams, useNavigate } from "react-router-dom";
 
-import { getTripById } from "../../../api/tripApi";
 import {
   cancelBooking,
   cancelTicket,
   getBookingById,
 } from "../../../api/bookingApi";
+import { useTrip } from "../../../hooks/useTrips";
 
 import "./BookingDetailPage.css";
 
@@ -76,11 +76,7 @@ function BookingDetailPage() {
   /*
    * 2. Lấy Trip Detail 
    */
-  const tripQuery = useQuery({
-    queryKey: ["trip", booking?.tripId],
-    queryFn: () => getTripById(booking.tripId),
-    enabled: Boolean(booking?.tripId),
-  });
+  const tripQuery = useTrip(booking?.tripId);
 
   /*
    * 3. Hủy một Ticket
@@ -192,7 +188,7 @@ function BookingDetailPage() {
     );
   }
 
-  const trip = tripQuery.data.data;
+  const trip = tripQuery.data;
 
   const tickets = booking.tickets ?? [];
 

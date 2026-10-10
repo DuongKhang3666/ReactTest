@@ -1,12 +1,9 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import { createAdminTrip } from "../../../api/adminTripApi";
-import { getAdminBuses } from "../../../api/adminBusApi";
-import { getAdminRoutes } from "../../../api/adminRouteApi";
+import { useBuses } from "../../../hooks/useBuses";
+import { useRoutes } from "../../../hooks/useRoutes";
+import { useCreateAdminTrip } from "../../../hooks/useTrips";
 
 function CreateTripForm({ onClose }) {
-  const queryClient = useQueryClient();
-
   const [form, setForm] = useState({
     routeId: "",
     busId: "",
@@ -17,37 +14,22 @@ function CreateTripForm({ onClose }) {
     notes: "",
   });
 
-  const routesQuery = useQuery({
-    queryKey: ["admin", "routes"],
-    queryFn: getAdminRoutes,
-  });
-
-  const busesQuery = useQuery({
-    queryKey: ["admin", "buses"],
-    queryFn: getAdminBuses,
-  });
-
-  const createMutation = useMutation({
-    mutationFn: createAdminTrip,
-
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["admin", "trips"],
-      });
-
-      setForm({
-        routeId: "",
-        busId: "",
-        departureTime: "",
-        arrivalTime: "",
-        price: "",
-        status: "SCHEDULED",
-        notes: "",
-      });
-
+  const routesQuery = useRoutes();
+  const busesQuery = useBuses();
+  const createMutation = useCreateAdminTrip();
+  const handleSuccess = () => {
+    setForm({
+      routeId: "",
+      busId: "",
+      departureTime: "",
+      arrivalTime: "",
+      price: "",
+      status: "SCHEDULED",
+      notes: "",
+    });
+    onClose();
       onClose();
-    },
-  });
+  };
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -73,7 +55,7 @@ function CreateTripForm({ onClose }) {
       price: Number(form.price),
       status: form.status,
       notes: form.notes,
-    });
+    }, { onSuccess: handleSuccess });
   };
 
   if (routesQuery.isPending || busesQuery.isPending) {
@@ -84,8 +66,8 @@ function CreateTripForm({ onClose }) {
     return <p>Không thể tải dữ liệu Route hoặc Bus.</p>;
   }
 
-  const routes = routesQuery.data.data;
-  const buses = busesQuery.data.data;
+  const routes = routesQuery.data;
+  const buses = busesQuery.data;
 
   return (
     <form className="trip-form" onSubmit={handleSubmit}>

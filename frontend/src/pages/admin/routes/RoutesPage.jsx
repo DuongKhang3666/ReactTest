@@ -5,56 +5,39 @@ import RouteTable from "../../../components/routes/RouteTable";
 import RouteCreateScreen from "./RouteCreateScreen";
 import RouteDetailScreen from "./RouteDetailScreen";
 import RouteEditScreen from "./RouteEditScreen";
+import { useCreateRoute, useDeleteRoute, useRoutes, useUpdateRoute } from "../../../hooks/useRoutes";
 import "./RouteScreens.css";
 
-const initialRoutes = [
-    {
-        id: "T-001",
-        departureCity: "TP. Hồ Chí Minh",
-        destinationCity: "Đà Lạt",
-        departureStation: "Bến xe Miền Đông",
-        arrivalStation: "Bến xe Đà Lạt",
-        distanceKm: 305,
-        durationMinutes: 420,
-        active: true,
-    },
-    {
-        id: "T-002",
-        departureCity: "Hà Nội",
-        destinationCity: "Hải Phòng",
-        departureStation: "Bến xe Nước Ngầm",
-        arrivalStation: "Bến xe Vĩnh Niệm",
-        distanceKm: 120,
-        durationMinutes: 150,
-        active: true,
-    },
-    {
-        id: "T-003",
-        departureCity: "Đà Nẵng",
-        destinationCity: "Huế",
-        departureStation: "Bến xe Trung tâm",
-        arrivalStation: "Bến xe Phía Nam",
-        distanceKm: 102,
-        durationMinutes: 135,
-        active: true,
-    },
-    {
-        id: "T-004",
-        departureCity: "Cần Thơ",
-        destinationCity: "Cà Mau",
-        departureStation: "Bến xe Cần Thơ",
-        arrivalStation: "Bến xe Cà Mau",
-        distanceKm: 180,
-        durationMinutes: 240,
-        active: false,
-    },
-];
+function toRouteView(route) {
+    return {
+        ...route,
+        arrivalStation: route.destinationStation,
+        active: route.status === "ACTIVE",
+    };
+}
+
+function toRoutePayload(formData) {
+    return {
+        departureCity: formData.departureCity,
+        destinationCity: formData.destinationCity,
+        departureStation: formData.departureStation,
+        destinationStation: formData.arrivalStation,
+        distanceKm: formData.distanceKm,
+        durationMinutes: formData.durationMinutes,
+        status: formData.active ? "ACTIVE" : "INACTIVE",
+    };
+}
 
 export default function RoutesPage() {
-    const [routes, setRoutes] = useState(initialRoutes);
+    const routesQuery = useRoutes();
+    const createMutation = useCreateRoute();
+    const deleteMutation = useDeleteRoute();
     const [selectedRoute, setSelectedRoute] = useState(null);
     const [activeScreen, setActiveScreen] = useState(null);
     const [routeToDelete, setRouteToDelete] = useState(null);
+    const updateMutation = useUpdateRoute(
+        activeScreen?.type === "edit" ? activeScreen.route.id : null,
+    );
 
     const handleBack = () => {
         setSelectedRoute(null);
@@ -66,69 +49,48 @@ export default function RoutesPage() {
         setActiveScreen({ type: "create" });
     };
 
-    const handleView = (route) => {
-        setActiveScreen({ type: "detail", route });
-    };
+    const handleView = (route) => setActiveScreen({ type: "detail", route });
 
     const handleEdit = (route) => {
         setSelectedRoute(route);
         setActiveScreen({ type: "edit", route });
     };
 
-    const handleDelete = (route) => {
-        setRouteToDelete(route);
-    };
+    const handleDelete = (route) => setRouteToDelete(route);
 
     const handleConfirmDelete = () => {
         if (!routeToDelete) return;
-
-        setRoutes((current) =>
-            current.filter((route) => route.id !== routeToDelete.id)
-        );
-
-        if (
-            activeScreen?.type === "detail" &&
-            activeScreen.route.id === routeToDelete.id
-        ) {
-            handleBack();
-        }
-
-        setRouteToDelete(null);
+        deleteMutation.mutate(routeToDelete.id, {
+            onSuccess: () => {
+                if (
+                    activeScreen?.type === "detail" &&
+                    activeScreen.route.id === routeToDelete.id
+                ) {
+                    handleBack();
+                }
+                setRouteToDelete(null);
+            },
+        });
     };
 
     const handleSubmit = (formData) => {
-        if (selectedRoute) {
-            setRoutes((current) =>
-                current.map((route) =>
-                    route.id === selectedRoute.id
-                        ? { ...route, ...formData }
-                        : route
-                )
-            );
-        } else {
-            setRoutes((current) => {
-                const nextId = Math.max(
-                    0,
-                    ...current.map((route) => Number(route.id.replace("T-", "")) || 0)
-                ) + 1;
-
-                return [
-                    ...current,
-                    {
-                        ...formData,
-                        id: `T-${String(nextId).padStart(3, "0")}`,
-                    },
-                ];
-            });
-        }
-
-        handleBack();
+        const payload = toRoutePayload(formData);
+        const mutation = selectedRoute ? updateMutation : createMutation;
+        mutation.mutate(payload, { onSuccess: handleBack });
     };
 
-    const handleReload = () => {
-        setRoutes(initialRoutes);
-    };
+    if (routesQuery.isPending) return <p role="status">Đang tải danh sách tuyến...</p>;
 
+    if (routesQuery.isError) {
+        return (
+            <section className="routes-page">
+                <p role="alert">Không thể tải danh sách tuyến: {routesQuery.error.message}</p>
+                <button type="button" onClick={() => routesQuery.refetch()}>Thử lại</button>
+            </section>
+        );
+    }
+
+    const routes = routesQuery.data.map(toRouteView);
     let screen;
 
     if (activeScreen?.type === "detail") {
@@ -140,12 +102,7 @@ export default function RoutesPage() {
             />
         );
     } else if (activeScreen?.type === "create") {
-        screen = (
-            <RouteCreateScreen
-                onCancel={handleBack}
-                onSubmit={handleSubmit}
-            />
-        );
+        screen = <RouteCreateScreen onCancel={handleBack} onSubmit={handleSubmit} />;
     } else if (activeScreen?.type === "edit") {
         screen = (
             <RouteEditScreen
@@ -159,7 +116,7 @@ export default function RoutesPage() {
             <div className="routes-page">
                 <PageHeader
                     title="Quản lý tuyến đường"
-                    onReload={handleReload}
+                    onReload={() => routesQuery.refetch()}
                     onCreate={handleCreate}
                     createLabel="Tạo tuyến"
                 />
@@ -175,9 +132,12 @@ export default function RoutesPage() {
         );
     }
 
+    const mutationError = createMutation.error ?? updateMutation.error ?? deleteMutation.error;
+
     return (
         <>
             {screen}
+            {mutationError && <p role="alert">Thao tác thất bại: {mutationError.message}</p>}
             <DeleteConfirmModal
                 open={routeToDelete !== null}
                 itemName={`tuyến ${routeToDelete?.id ?? ""}`}

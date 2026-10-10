@@ -5,7 +5,7 @@ import selectedBox from "../../assets/selected_box.png";
 import unavailable from "../../assets/unavailable.png";
 
 export default function Seat({ seat, selected = false, onClick }) {
-    const isUnavailable = seat.status !== "ACTIVE";
+    const isUnavailable = !["ACTIVE", "AVAILABLE"].includes(seat.status);
 
     let image = armchair;
 

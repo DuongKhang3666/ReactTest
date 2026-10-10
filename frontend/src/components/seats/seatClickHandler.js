@@ -1,5 +1,5 @@
 export function toggleSeatSelection(seat, setSelectedSeats) {
-    if (seat.status !== "ACTIVE") return;
+    if (!["ACTIVE", "AVAILABLE"].includes(seat.status)) return;
 
     setSelectedSeats((current) => {
         const exists = current.includes(seat.id);

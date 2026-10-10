@@ -1,10 +1,5 @@
 import { useMemo, useState } from "react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-
-import {
-  deleteAdminTrip,
-  getAdminTrips,
-} from "../../../api/adminTripApi";
+import { useDeleteAdminTrip, useAdminTrips } from "../../../hooks/useTrips";
 
 import CreateTripForm from "./CreateTripForm";
 import EditTripForm from "./EditTripForm";
@@ -18,6 +13,7 @@ const STATUS_OPTIONS = [
   { value: "COMPLETED", label: "Hoàn thành" },
   { value: "CANCELLED", label: "Đã hủy" },
 ];
+const EMPTY_TRIPS = [];
 
 function formatDateTime(value) {
   if (!value) {
@@ -48,35 +44,16 @@ function getStatusLabel(status) {
 }
 
 function AdminTripsPage() {
-  const queryClient = useQueryClient();
-
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("ALL");
 
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [editingTripId, setEditingTripId] = useState(null);
 
-  const {
-    data,
-    isPending,
-    isError,
-    error,
-  } = useQuery({
-    queryKey: ["admin", "trips"],
-    queryFn: getAdminTrips,
-  });
-
-  const deleteMutation = useMutation({
-    mutationFn: deleteAdminTrip,
-
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["admin", "trips"],
-      });
-    },
-  });
-
-  const trips = data?.data ?? [];
+  const tripsQuery = useAdminTrips();
+  const deleteMutation = useDeleteAdminTrip();
+  const { isPending, isError, error, refetch } = tripsQuery;
+  const trips = tripsQuery.data ?? EMPTY_TRIPS;
 
   const filteredTrips = useMemo(() => {
     const normalizedSearch = search.trim().toLowerCase();
@@ -171,11 +148,7 @@ function AdminTripsPage() {
           <button
             type="button"
             className="btn btn-primary"
-            onClick={() =>
-              queryClient.invalidateQueries({
-                queryKey: ["admin", "trips"],
-              })
-            }
+            onClick={() => refetch()}
           >
             Thử lại
           </button>
@@ -513,6 +486,7 @@ function AdminTripsPage() {
             </button>
 
             <EditTripForm
+              key={editingTripId}
               tripId={editingTripId}
               onClose={() => setEditingTripId(null)}
             />

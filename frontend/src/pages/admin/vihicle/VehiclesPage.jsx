@@ -5,54 +5,39 @@ import VehicleDetailScreen from "./VehicleDetailScreen";
 import VehicleCreateScreen from "./VehicleCreateScreen";
 import VehicleEditScreen from "./VehicleEditScreen";
 import DeleteConfirmModal from "../../../components/common/DeleteConfirmModal";
+import { useBuses, useCreateBus, useDeleteBus, useUpdateBus } from "../../../hooks/useBuses";
 import "./VehicleScreens.css";
 
-const initialVehicles = [
-    {
-        id: "XE-001",
-        plate: "51B-123.45",
-        type: "Limousine 22 chỗ",
-        seats: 22,
-        active: true,
-        description: "Xe limousine cao cấp phục vụ tuyến TP. Hồ Chí Minh - Đà Lạt.",
-        createdAt: "2025-03-12T09:24:00",
-        updatedAt: "2025-06-02T14:18:00",
-    },
-    {
-        id: "XE-002",
-        plate: "29B-678.90",
-        type: "Giường nằm 40 chỗ",
-        seats: 40,
-        active: true,
-    },
-    {
-        id: "XE-003",
-        plate: "43B-246.80",
-        type: "Ghế ngồi 29 chỗ",
-        seats: 29,
-        active: false,
-    },
-    {
-        id: "XE-004",
-        plate: "50F-135.79",
-        type: "Limousine 16 chỗ",
-        seats: 16,
-        active: true,
-    },
-    {
-        id: "XE-005",
-        plate: "30G-975.31",
-        type: "Giường nằm 34 chỗ",
-        seats: 34,
-        active: true,
-    },
-];
+function toVehicle(bus) {
+    return {
+        ...bus,
+        plate: bus.licensePlate,
+        type: bus.busType,
+        seats: bus.seatCount,
+        active: bus.status === "ACTIVE",
+    };
+}
+
+function toBusPayload(formData) {
+    return {
+        licensePlate: formData.plate,
+        busType: formData.type,
+        seatCount: formData.seats,
+        description: formData.description,
+        status: formData.active ? "ACTIVE" : "INACTIVE",
+    };
+}
 
 export default function VehiclesPage() {
-    const [vehicles, setVehicles] = useState(initialVehicles);
+    const busesQuery = useBuses();
+    const createMutation = useCreateBus();
+    const deleteMutation = useDeleteBus();
     const [selectedVehicle, setSelectedVehicle] = useState(null);
     const [activeScreen, setActiveScreen] = useState(null);
     const [vehicleToDelete, setVehicleToDelete] = useState(null);
+    const updateMutation = useUpdateBus(
+        activeScreen?.type === "edit" ? activeScreen.vehicle.id : null,
+    );
 
     const handleBack = () => {
         setSelectedVehicle(null);
@@ -69,77 +54,42 @@ export default function VehiclesPage() {
         setActiveScreen({ type: "edit", vehicle });
     };
 
-    const handleView = (vehicle) => {
-        setActiveScreen({ type: "detail", vehicle });
-    };
+    const handleView = (vehicle) => setActiveScreen({ type: "detail", vehicle });
+    const handleDelete = (vehicle) => setVehicleToDelete(vehicle);
 
-    // Mở popup xác nhận.
-    const handleDelete = (vehicle) => {
-        setVehicleToDelete(vehicle);
-    };
-
-    // Xóa sau khi xác nhận trong popup.
     const handleConfirmDelete = () => {
         if (!vehicleToDelete) return;
-
-        setVehicles((prev) =>
-            prev.filter((vehicle) => vehicle.id !== vehicleToDelete.id)
-        );
-
-        if (
-            activeScreen?.type === "detail" &&
-            activeScreen.vehicle.id === vehicleToDelete.id
-        ) {
-            handleBack();
-        }
-
-        setVehicleToDelete(null);
+        deleteMutation.mutate(vehicleToDelete.id, {
+            onSuccess: () => {
+                if (
+                    activeScreen?.type === "detail" &&
+                    activeScreen.vehicle.id === vehicleToDelete.id
+                ) {
+                    handleBack();
+                }
+                setVehicleToDelete(null);
+            },
+        });
     };
 
     const handleSubmit = (formData) => {
-        const timestamp = new Date().toISOString();
-
-        if (selectedVehicle) {
-            setVehicles((prev) =>
-                prev.map((vehicle) =>
-                    vehicle.id === selectedVehicle.id
-                        ? {
-                            ...vehicle,
-                            ...formData,
-                            updatedAt: timestamp,
-                        }
-                        : vehicle
-                )
-            );
-        } else {
-            setVehicles((prev) => {
-                const nextId =
-                    Math.max(
-                        0,
-                        ...prev.map(
-                            (vehicle) =>
-                                Number(vehicle.id.replace("XE-", "")) || 0
-                        )
-                    ) + 1;
-
-                const newVehicle = {
-                    ...formData,
-                    id: `XE-${String(nextId).padStart(3, "0")}`,
-                    createdAt: timestamp,
-                    updatedAt: timestamp,
-                };
-
-                return [...prev, newVehicle];
-            });
-        }
-
-        handleBack();
+        const payload = toBusPayload(formData);
+        const mutation = selectedVehicle ? updateMutation : createMutation;
+        mutation.mutate(payload, { onSuccess: handleBack });
     };
 
-    const handleReload = () => {
-        setVehicles(initialVehicles);
-    };
+    if (busesQuery.isPending) return <p role="status">Đang tải danh sách xe...</p>;
 
+    if (busesQuery.isError) {
+        return (
+            <section className="vehicles-page">
+                <p role="alert">Không thể tải danh sách xe: {busesQuery.error.message}</p>
+                <button type="button" onClick={() => busesQuery.refetch()}>Thử lại</button>
+            </section>
+        );
+    }
+
+    const vehicles = busesQuery.data.map(toVehicle);
     let screen;
 
     if (activeScreen?.type === "detail") {
@@ -151,12 +101,7 @@ export default function VehiclesPage() {
             />
         );
     } else if (activeScreen?.type === "create") {
-        screen = (
-            <VehicleCreateScreen
-                onCancel={handleBack}
-                onSubmit={handleSubmit}
-            />
-        );
+        screen = <VehicleCreateScreen onCancel={handleBack} onSubmit={handleSubmit} />;
     } else if (activeScreen?.type === "edit") {
         screen = (
             <VehicleEditScreen
@@ -170,11 +115,10 @@ export default function VehiclesPage() {
             <div className="vehicles-page">
                 <PageHeader
                     title="Quản lý xe"
-                    onReload={handleReload}
+                    onReload={() => busesQuery.refetch()}
                     onCreate={handleCreate}
                     createLabel="Tạo xe"
                 />
-
                 <div className="vehicle-card">
                     <VehicleTable
                         vehicles={vehicles}
@@ -187,9 +131,12 @@ export default function VehiclesPage() {
         );
     }
 
+    const mutationError = createMutation.error ?? updateMutation.error ?? deleteMutation.error;
+
     return (
         <>
             {screen}
+            {mutationError && <p role="alert">Thao tác thất bại: {mutationError.message}</p>}
             <DeleteConfirmModal
                 open={vehicleToDelete !== null}
                 itemName={`xe ${vehicleToDelete?.id ?? ""}`}
