@@ -14,8 +14,8 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     boolean existsByTripId(Long tripId);
 
     @Query(
-            value = "SELECT * FROM bookings WHERE id = :id FOR UPDATE",
-            nativeQuery = true
+        value = "SELECT * FROM bookings WHERE id = :id FOR UPDATE",
+        nativeQuery = true
     )
     Optional<Booking> findByIdForUpdate(@Param("id") Long id);
 

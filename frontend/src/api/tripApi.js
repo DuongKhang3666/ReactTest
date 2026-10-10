@@ -1,8 +1,8 @@
 import axiosClient from "./axiosClient";
 
 export const searchTrips = ({
-                              from, to, date,
-                            }) => {
+  from, to, date,
+}) => {
   return axiosClient.get("/trips", {
     params: {
       from, to, date,

@@ -46,6 +46,8 @@ import java.util.UUID;
 @Service
 public class BookingService {
 
+    private static final BigDecimal MAX_TOTAL_AMOUNT = new BigDecimal("9999999999.99");
+
     @jakarta.persistence.PersistenceContext
     private jakarta.persistence.EntityManager entityManager;
 
@@ -115,11 +117,17 @@ public class BookingService {
 
         Map<Long, Seat> seats = lockAndValidateSeats(trip, orderedSeatIds);
 
+        
+        List<String> activeStatuses = List.of(
+                TicketStatus.RESERVED.name(),
+                TicketStatus.CONFIRMED.name()
+        );
+
         List<Long> conflictingSeatIds =
                 ticketRepository.findOccupiedForSeatsForUpdate(
                                 trip.getId(),
                                 orderedSeatIds,
-                                List.of(TicketStatus.RESERVED, TicketStatus.CONFIRMED)
+                                activeStatuses
                         )
                         .stream()
                         .map(ticket -> ticket.getSeat().getId())
@@ -144,6 +152,9 @@ public class BookingService {
                 ));
 
         BigDecimal totalAmount = trip.getPrice().multiply(BigDecimal.valueOf(orderedSeatIds.size()));
+        if (totalAmount.compareTo(MAX_TOTAL_AMOUNT) > 0) {
+            throw new BadRequestException("Booking total amount exceeds the supported maximum of 9999999999.99");
+        }
 
         Booking booking = new Booking();
         booking.setBookingCode(

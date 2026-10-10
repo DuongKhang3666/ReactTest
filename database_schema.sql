@@ -107,17 +107,18 @@ CREATE TABLE IF NOT EXISTS seats (
     seat_number VARCHAR(20) NOT NULL,
     seat_type ENUM('REGULAR', 'VIP', 'WINDOW', 'AISLE') NOT NULL DEFAULT 'REGULAR',
     floor_number TINYINT UNSIGNED NOT NULL DEFAULT 1,
-    row_number INT UNSIGNED NULL,
-    column_number INT UNSIGNED NULL,
+    seat_row INT UNSIGNED NULL,
+    seat_column INT UNSIGNED NULL,
     status ENUM('ACTIVE', 'INACTIVE') NOT NULL DEFAULT 'ACTIVE',
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (id),
     UNIQUE KEY uk_seats_bus_number (bus_id, seat_number),
     KEY idx_seats_bus (bus_id),
     CONSTRAINT fk_seats_bus
-    FOREIGN KEY (bus_id) REFERENCES buses(id)
-    ON UPDATE CASCADE ON DELETE CASCADE
-    ) ENGINE=InnoDB;
+        FOREIGN KEY (bus_id) REFERENCES buses(id)
+        ON UPDATE CASCADE ON DELETE CASCADE
+) ENGINE=InnoDB;
+
 
 -- -------------------------------------------------------------
 -- 6. BOOKINGS
@@ -400,6 +401,101 @@ WHERE r.departure_city = 'TP.HCM'
     WHERE t.route_id = r.id
       AND t.bus_id = b.id
       AND t.departure_time = '2026-10-05 20:00:00'
+);
+
+-- 1. TP.HCM -> Đà Nẵng
+INSERT INTO trips (
+    route_id,
+    bus_id,
+    departure_time,
+    arrival_time,
+    price,
+    status,
+    notes
+)
+SELECT
+    r.id,
+    b.id,
+    '2027-06-05 07:00:00',
+    '2027-06-05 18:00:00',
+    350000,
+    'SCHEDULED',
+    'Demo trip - June 2027'
+FROM routes r
+         JOIN buses b
+              ON b.license_plate = '51A-12345'
+WHERE r.departure_city = 'TP.HCM'
+  AND r.destination_city = 'Đà Nẵng'
+  AND NOT EXISTS (
+    SELECT 1
+    FROM trips t
+    WHERE t.route_id = r.id
+      AND t.bus_id = b.id
+      AND t.departure_time = '2027-06-05 07:00:00'
+);
+
+
+-- 2. TP.HCM -> Quảng Ngãi
+INSERT INTO trips (
+    route_id,
+    bus_id,
+    departure_time,
+    arrival_time,
+    price,
+    status,
+    notes
+)
+SELECT
+    r.id,
+    b.id,
+    '2027-06-12 20:00:00',
+    '2027-06-13 06:00:00',
+    300000,
+    'SCHEDULED',
+    'Demo trip - June 2027'
+FROM routes r
+         JOIN buses b
+              ON b.license_plate = '43B-67890'
+WHERE r.departure_city = 'TP.HCM'
+  AND r.destination_city = 'Quảng Ngãi'
+  AND NOT EXISTS (
+    SELECT 1
+    FROM trips t
+    WHERE t.route_id = r.id
+      AND t.bus_id = b.id
+      AND t.departure_time = '2027-06-12 20:00:00'
+);
+
+
+-- 3. TP.HCM -> Đà Nẵng
+INSERT INTO trips (
+    route_id,
+    bus_id,
+    departure_time,
+    arrival_time,
+    price,
+    status,
+    notes
+)
+SELECT
+    r.id,
+    b.id,
+    '2027-06-20 20:00:00',
+    '2027-06-21 07:00:00',
+    400000,
+    'SCHEDULED',
+    'Demo trip - June 2027'
+FROM routes r
+         JOIN buses b
+              ON b.license_plate = '51A-12345'
+WHERE r.departure_city = 'TP.HCM'
+  AND r.destination_city = 'Đà Nẵng'
+  AND NOT EXISTS (
+    SELECT 1
+    FROM trips t
+    WHERE t.route_id = r.id
+      AND t.bus_id = b.id
+      AND t.departure_time = '2027-06-20 20:00:00'
 );
 
 -- =============================================================

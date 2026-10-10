@@ -23,14 +23,13 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
             @Param("statuses") Collection<TicketStatus> statuses);
 
     @Query(
-            value = "SELECT * FROM tickets WHERE id = :id FOR UPDATE",
-            nativeQuery = true
+      value = "SELECT * FROM tickets WHERE id = :id FOR UPDATE",
+      nativeQuery = true
     )
     Optional<Ticket> findByIdForUpdate(@Param("id") Long id);
 
 
-    @Query(
-            value = """
+   @Query(value = """
         SELECT *
         FROM tickets
         WHERE trip_id = :tripId
@@ -38,25 +37,22 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
           AND status IN (:statuses)
         ORDER BY seat_id
         FOR UPDATE
-        """,
-            nativeQuery = true
-    )
+        """, nativeQuery = true)
     List<Ticket> findOccupiedForSeatsForUpdate(
             @Param("tripId") Long tripId,
             @Param("seatIds") Collection<Long> seatIds,
             @Param("statuses") Collection<String> statuses
     );
 
-
     @Query(
-            value = """
+      value = """
         SELECT *
         FROM tickets
         WHERE booking_id = :bookingId
         ORDER BY id
         FOR UPDATE
         """,
-            nativeQuery = true
+      nativeQuery = true
     )
     List<Ticket> findByBookingIdForUpdate(@Param("bookingId") Long bookingId);
 

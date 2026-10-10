@@ -24,8 +24,8 @@ public interface TripRepository extends JpaRepository<Trip, Long> {
     Optional<Trip> findById(Long id);
 
     @Query(
-            value = "SELECT * FROM trips WHERE id = :id FOR UPDATE",
-            nativeQuery = true
+        value = "SELECT * FROM trips WHERE id = :id FOR UPDATE",
+        nativeQuery = true
     )
     Optional<Trip> findByIdForUpdate(@Param("id") Long id);
 
