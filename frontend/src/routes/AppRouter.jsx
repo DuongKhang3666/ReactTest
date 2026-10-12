@@ -20,6 +20,13 @@ function AppRouter() {
                 <Route path="/trips/:tripId" element={<TripDetailsPage />} />
                 <Route path="/trips/:tripId/seats" element={<SeatSelectPage />} />
 
+                <Route path="/admin" element={<AdminLayout />}>
+                    <Route path="vehicles" element={<VehiclesPage />} />
+                    <Route path="routes" element={<RoutesPage />} />
+                    <Route path="users" element={<UsersPage />} />
+                    <Route path="trips" element={<AdminTripsPage />} />
+                </Route>
+
                 <Route element={<ProtectedRoute role="CUSTOMER" />}>
                     <Route path="/booking" element={<BookingPage />} />
                     <Route path="/my-bookings" element={<MyBookingsPage />} />

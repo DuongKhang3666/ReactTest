@@ -1,7 +1,4 @@
-// import chair_color from "../../assets/chair_color.png";
-import selectedBox from "../../assets/selected_box.png";
-import unavailable from "../../assets/unavailable.png";
-import armchair from "../../assets/armchair.png";
+import {unavailable, selectedBox, armchair} from "../../assets";
 
 import "./SeatNote.css";
 

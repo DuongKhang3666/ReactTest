@@ -22,6 +22,7 @@ export default function SeatMap({
 
     const normalizedSeats = seats.map((seat) => ({
         ...seat,
+        id: seat.id ?? seat.seatId ?? seat.seat_id,
         seatNumber: seat.seatNumber ?? seat.seat_number,
         floorNumber: seat.floorNumber ?? seat.floor_number,
         rowNumber: seat.rowNumber ?? seat.row_number,

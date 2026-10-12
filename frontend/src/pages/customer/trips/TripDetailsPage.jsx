@@ -3,6 +3,7 @@ import Card from "../../../components/common/Card.jsx";
 import { useTrip } from "../../../hooks/useTrips";
 import { useTripSeats } from "../../../hooks/useSeats";
 import "./TripDetailsPage.css";
+import {display, plugin, snowflake, water, wifi, toilet} from "../../../assets"
 
 const currencyFormatter = new Intl.NumberFormat("vi-VN");
 
@@ -80,6 +81,7 @@ export default function TripDetailsPage() {
             </div>
 
             <div className="trip-details-layout">
+                {/* Left */}
                 <div className="trip-details-main">
                     <Card className="trip-card trip-overview-card" padding="20px">
                         <div className="operator-row">
@@ -129,14 +131,55 @@ export default function TripDetailsPage() {
                         </div>
                     </Card>
 
-                    {trip.notes && (
-                        <Card className="trip-card amenities-card" padding="20px">
-                            <h2>Thông tin chuyến xe</h2>
-                            <p>{trip.notes}</p>
-                        </Card>
-                    )}
-                </div>
+                    <Card className="trip-card amenities-card" padding="20px">
+                        <h2>Tiện ích trên xe</h2>
 
+                        <div className="amenities-grid">
+                            <div className="amenity-item">
+                                <span className="amenity-icon">
+                                    <img src={wifi} alt="Wi-Fi" />
+                                </span>
+                                <span>Wi-Fi miễn phí</span>
+                            </div>
+
+                            <div className="amenity-item">
+                                <span className="amenity-icon">
+                                    <img src={snowflake} alt="aircondition" />
+                                </span>
+                                <span>Điều hòa</span>
+                            </div>
+
+                            <div className="amenity-item">
+                                <span className="amenity-icon">
+                                    <img src={water} alt="water" />
+                                </span>
+                                <span>Nước uống</span>
+                            </div>
+
+                            <div className="amenity-item">
+                                <span className="amenity-icon">
+                                    <img src={plugin} alt="plugin" />
+                                </span>
+                                <span>Cổng USB</span>
+                            </div>
+
+                            <div className="amenity-item">
+                                <span className="amenity-icon">
+                                    <img src={toilet} alt="restroom" />
+                                </span>
+                                <span>Nhà vệ sinh</span>
+                            </div>
+
+                            <div className="amenity-item">
+                                <span className="amenity-icon">
+                                    <img src={display} alt="monitor" />
+                                </span>
+                                <span>Màn hình</span>
+                            </div>
+                        </div>
+                    </Card>
+                </div>
+                {/* right */}
                 <Card className="trip-card price-card" padding="20px">
                     <div className="price-card-content">
                         <p className="price-eyebrow">GIÁ VÉ / GHẾ</p>

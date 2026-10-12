@@ -1,8 +1,5 @@
 import "./Seat.css";
-
-import armchair from "../../assets/armchair.png";
-import selectedBox from "../../assets/selected_box.png";
-import unavailable from "../../assets/unavailable.png";
+import {unavailable, selectedBox, armchair} from "../../assets";
 
 export default function Seat({ seat, selected = false, onClick }) {
     const isUnavailable = !["ACTIVE", "AVAILABLE"].includes(seat.status);

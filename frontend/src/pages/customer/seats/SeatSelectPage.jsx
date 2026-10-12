@@ -76,7 +76,6 @@ export default function SeatSelectPage() {
     return (
         <main className="seats-page">
             <header className="seats-page__header">
-                <Link to={`/trips/${tripId}`}>← Chi tiết chuyến</Link>
                 <h1>Chọn ghế cho chuyến #{tripId}</h1>
                 <p>
                     {tripQuery.data.route?.departureCity} → {tripQuery.data.route?.destinationCity}
