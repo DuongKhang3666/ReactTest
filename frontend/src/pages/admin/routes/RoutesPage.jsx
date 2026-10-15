@@ -40,6 +40,10 @@ export default function RoutesPage() {
     );
 
     const handleBack = () => {
+        createMutation.reset();
+        updateMutation.reset();
+        deleteMutation.reset();
+        
         setSelectedRoute(null);
         setActiveScreen(null);
     };
@@ -137,7 +141,12 @@ export default function RoutesPage() {
     return (
         <>
             {screen}
-            {mutationError && <p role="alert">Thao tác thất bại: {mutationError.message}</p>}
+            {mutationError && (
+                <p role="alert"> Thao tác thất bại:{" "}
+                    {mutationError.response?.data?.message ||
+                    mutationError.message || "Đã xảy ra lỗi, vui lòng thử lại."}
+                </p>
+            )}
             <DeleteConfirmModal
                 open={routeToDelete !== null}
                 itemName={`tuyến ${routeToDelete?.id ?? ""}`}

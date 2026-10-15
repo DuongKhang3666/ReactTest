@@ -40,6 +40,10 @@ export default function VehiclesPage() {
     );
 
     const handleBack = () => {
+        createMutation.reset();
+        updateMutation.reset();
+        deleteMutation.reset();
+        
         setSelectedVehicle(null);
         setActiveScreen(null);
     };
@@ -136,7 +140,12 @@ export default function VehiclesPage() {
     return (
         <>
             {screen}
-            {mutationError && <p role="alert">Thao tác thất bại: {mutationError.message}</p>}
+            {mutationError && (
+                <p role="alert"> Thao tác thất bại:{" "}
+                    {mutationError.response?.data?.message ||
+                    mutationError.message || "Đã xảy ra lỗi, vui lòng thử lại."}
+                </p>
+            )}
             <DeleteConfirmModal
                 open={vehicleToDelete !== null}
                 itemName={`xe ${vehicleToDelete?.id ?? ""}`}
