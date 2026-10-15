@@ -166,7 +166,7 @@ public class GlobalExceptionHandler {
         ErrorResponse errorResponse = new ErrorResponse(
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(),
-                "An unexpected error occurred",
+                "Xảy ra lỗi ngoài ý muốn",
                 request != null ? request.getRequestURI() : null
         );
 

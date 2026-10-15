@@ -4,6 +4,7 @@ import com.example.backend.entity.Bus;
 import com.example.backend.entity.Seat;
 import com.example.backend.enums.SeatStatus;
 import com.example.backend.enums.SeatType;
+import com.example.backend.exception.BadRequestException;
 import com.example.backend.repository.BusRepository;
 import com.example.backend.repository.SeatRepository;
 import jakarta.transaction.Transactional;
@@ -99,14 +100,14 @@ public class BusService {
                 && busRepository.existsByLicensePlate(
                 updatedBus.getLicensePlate())) {
             throw new RuntimeException(
-                    "License plate already exists");
+                    "Biển số đã tồn tại");
         }
 
         if (!existingBus.getSeatCount()
                 .equals(updatedBus.getSeatCount())) {
-            throw new IllegalArgumentException(
-                    "Cannot change seat count directly. "
-                            + "Existing seats may be referenced by tickets.");
+            throw new BadRequestException(
+                    "Không thể thay đổi số ghế của xe hiện tại. "
+                            + "Số ghế có thể đang được tham chiếu bởi vé.");
         }
 
         existingBus.setLicensePlate(
