@@ -1,0 +1,474 @@
+.trip-details-page {
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 100vh;
+    padding: 30px clamp(20px, 7vw, 100px) 48px;
+    background: #f5f8fc;
+    color: #14243b;
+}
+
+.trip-details-page * {
+    box-sizing: border-box;
+}
+
+.trip-details-heading {
+    margin: 0 0 24px;
+}
+
+.trip-details-heading h1 {
+    margin: 0 0 5px;
+    color: #102039;
+    font-size: 24px;
+    font-weight: 750;
+    line-height: 1.25;
+}
+
+.trip-details-heading p {
+    margin: 0;
+    color: #6c7d96;
+    font-size: 13px;
+}
+
+.trip-details-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(280px, 0.94fr);
+    align-items: stretch;
+    gap: 18px;
+}
+
+.trip-details-main {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.trip-card {
+    border-color: #e8eef5;
+    border-radius: 15px;
+    box-shadow: 0 2px 4px rgb(27 50 80 / 7%);
+}
+
+.operator-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 23px;
+}
+
+.operator-icon {
+    display: grid;
+    width: 42px;
+    height: 42px;
+    flex: 0 0 42px;
+    place-items: center;
+    border-radius: 12px;
+    background: #ecfbf8;
+}
+
+.operator-icon img {
+    width: 22px;
+    height: 22px;
+    object-fit: contain;
+}
+
+.operator-info > strong {
+    color: #15253d;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.operator-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 9px;
+    margin-top: 4px;
+    font-size: 11px;
+}
+
+.vehicle-tag {
+    padding: 3px 7px;
+    border-radius: 5px;
+    background: #f0f4f9;
+    color: #576984;
+}
+
+.rating {
+    color: #253b5b;
+}
+
+.rating > span {
+    color: #f5a400;
+}
+
+.rating small {
+    color: #8998ad;
+    font-size: 10px;
+}
+
+.route-stops {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 88px minmax(0, 1fr);
+    align-items: start;
+    gap: 10px;
+    padding-bottom: 20px;
+}
+
+.route-stop {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+}
+
+.route-stop-arrival {
+    align-items: flex-end;
+    text-align: right;
+}
+
+.route-stop-label,
+.trip-fact > span,
+.booking-detail > span {
+    color: #8a9bb3;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.025em;
+    text-transform: uppercase;
+}
+
+.route-stop-time {
+    margin-top: 5px;
+    color: #102039;
+    font-size: 23px;
+    font-weight: 700;
+    line-height: 1.15;
+}
+
+.route-stop-date {
+    margin-top: 3px;
+    color: #7c8da5;
+    font-size: 11px;
+}
+
+.route-stop-name {
+    margin-top: 7px;
+    color: #263a57;
+    font-size: 12px;
+}
+
+.route-stop-address {
+    max-width: 260px;
+    margin-top: 3px;
+    color: #71819a;
+    font-size: 11px;
+    line-height: 1.45;
+}
+
+.route-stop-arrival .route-stop-address {
+    text-align: right;
+}
+
+.route-connector {
+    display: flex;
+    align-items: center;
+    align-self: start;
+    flex-direction: column;
+    padding-top: 46px;
+    color: #7587a0;
+}
+
+.route-connector > span {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: #09a28e;
+}
+
+.route-connector > span:last-child {
+    background: #9aaac0;
+}
+
+.route-connector > div {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    gap: 5px;
+    margin: 2px 0;
+    color: #7486a0;
+    font-size: 10px;
+    white-space: nowrap;
+}
+
+.route-connector > div::before,
+.route-connector > div::after {
+    height: 1px;
+    flex: 1;
+    background: #cbd7e5;
+    content: "";
+}
+
+.route-connector i {
+    display: none;
+}
+
+.trip-facts {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    margin: 0 -20px -20px;
+    padding: 14px 20px;
+    border-top: 1px solid #eef2f7;
+}
+
+.trip-fact {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.trip-fact strong {
+    overflow: hidden;
+    color: #263a57;
+    font-size: 12px;
+    font-weight: 650;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.amenities-card h2 {
+    margin: 0 0 15px;
+    color: #162741;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.amenities-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 9px;
+}
+
+.amenity-item {
+    display: flex;
+    min-width: 0;
+    min-height: 42px;
+    align-items: center;
+    gap: 9px;
+    padding: 8px 10px;
+    border: 1px solid #edf1f6;
+    border-radius: 10px;
+    background: #f8fafc;
+    color: #334963;
+    font-size: 11px;
+}
+
+.amenity-icon {
+    display: grid;
+    width: 18px;
+    flex: 0 0 18px;
+    place-items: center;
+    color: #2388e8;
+    font-size: 16px;
+}
+
+.price-card {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.price-card-content {
+    width: 100%;
+}
+
+.price-eyebrow {
+    margin: 0;
+    color: #91a1b7;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-align: center;
+}
+
+.ticket-price {
+    display: block;
+    margin: 4px 0 18px;
+    color: #079b89;
+    font-size: 27px;
+    font-weight: 750;
+    line-height: 1.2;
+    text-align: center;
+}
+
+.booking-details {
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+}
+
+.booking-detail {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.booking-detail > span {
+    flex: 0 0 auto;
+    font-size: 10px;
+    text-transform: none;
+}
+
+.booking-detail > strong {
+    color: #344862;
+    font-size: 10px;
+    font-weight: 650;
+    text-align: right;
+}
+
+.availability-note {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 18px;
+    padding: 10px 11px;
+    border: 1px solid #ffedb4;
+    border-radius: 10px;
+    background: #fffbeb;
+    color: #d97706;
+}
+
+.availability-note > span {
+    flex: 0 0 auto;
+    color: #f59e0b;
+    font-size: 18px;
+    font-weight: 800;
+}
+
+.availability-note p {
+    margin: 0;
+    font-size: 10px;
+    line-height: 1.4;
+}
+
+.price-card-actions {
+    width: 100%;
+    margin-top: 22px;
+}
+
+.choose-seat-button {
+    display: flex;
+    width: 100%;
+    min-height: 42px;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    border-radius: 10px;
+    background: #0d998b;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: background-color 0.15s ease, transform 0.15s ease;
+}
+
+.choose-seat-button:hover {
+    transform: translateY(-1px);
+    background: #0b877b;
+}
+
+.booking-promises {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 12px;
+    color: #8798ad;
+    font-size: 9px;
+}
+
+.booking-promises span {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.booking-promises i {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #10b981;
+}
+
+@media (max-width: 900px) {
+    .trip-details-page {
+        padding-right: 24px;
+        padding-left: 24px;
+    }
+
+    .trip-details-layout {
+        grid-template-columns: minmax(0, 1.5fr) minmax(250px, 0.9fr);
+        gap: 14px;
+    }
+
+    .amenities-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 680px) {
+    .trip-details-page {
+        padding: 22px 16px 32px;
+    }
+
+    .trip-details-layout {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .price-card {
+        min-height: 390px;
+    }
+}
+
+@media (max-width: 460px) {
+    .route-stops {
+        grid-template-columns: minmax(0, 1fr) 54px minmax(0, 1fr);
+        gap: 5px;
+    }
+
+    .route-stop-time {
+        font-size: 20px;
+    }
+
+    .route-stop-name {
+        font-size: 11px;
+    }
+
+    .route-stop-address {
+        font-size: 10px;
+    }
+
+    .route-connector > div {
+        font-size: 9px;
+    }
+
+    .trip-facts {
+        gap: 8px;
+    }
+
+    .trip-fact strong {
+        font-size: 10px;
+    }
+
+    .amenities-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .amenity-item {
+        padding-right: 7px;
+        padding-left: 7px;
+        font-size: 10px;
+    }
+}

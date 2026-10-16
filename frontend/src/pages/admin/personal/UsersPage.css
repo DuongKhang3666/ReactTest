@@ -1,0 +1,335 @@
+.users-page {
+    color: #234572;
+}
+
+.users-card {
+    overflow: visible;
+    border: 1px solid #dfe6f1;
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: 0 2px 8px rgb(30 58 95 / 4%);
+}
+
+.users-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    border-radius: inherit;
+}
+
+.users-table {
+    width: 100%;
+    min-width: 1000px;
+    table-layout: fixed;
+    border-collapse: collapse;
+    border-spacing: 0;
+    color: #234572;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.users-column-id {
+    width: 10%;
+}
+
+.users-column-username {
+    width: 14%;
+}
+
+.users-column-email {
+    width: 17%;
+}
+
+.users-column-name {
+    width: 17%;
+}
+
+.users-column-phone {
+    width: 14%;
+}
+
+.users-column-role {
+    width: 18%;
+}
+
+.users-column-actions {
+    width: 10%;
+}
+
+.users-table th,
+.users-table td {
+    padding: 10px 14px;
+    border-bottom: 1px solid #eaf0f7;
+    text-align: left;
+    vertical-align: middle;
+    overflow-wrap: anywhere;
+}
+
+.users-table th {
+    height: 40px;
+    background: #f7f9fc;
+    color: #64748b;
+    font-size: 9px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.users-table td {
+    height: 56px;
+}
+
+.users-table th:last-child,
+.users-table td:last-child {
+    text-align: center;
+}
+
+.users-table tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+.user-role-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    max-width: 100%;
+    padding: 4px 9px;
+    border-radius: 999px;
+    font-size: 10px;
+    font-weight: 600;
+    line-height: 16px;
+    white-space: nowrap;
+}
+
+.user-role-customer {
+    background: #e6f7f1;
+    color: #00966d;
+}
+
+.user-role-admin {
+    background: #e8efff;
+    color: #2456b3;
+}
+
+.user-role-dot {
+    width: 6px;
+    height: 6px;
+    flex: 0 0 6px;
+    border-radius: 50%;
+    background: currentColor;
+}
+
+.user-row-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.user-view-button,
+.user-role-menu > summary {
+    display: inline-flex;
+    min-height: 32px;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    padding: 0 9px;
+    border: 1px solid #d2dcef;
+    border-radius: 8px;
+    background: #fff;
+    color: #234572;
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 1;
+    white-space: nowrap;
+    cursor: pointer;
+    list-style: none;
+}
+
+.user-view-button:hover,
+.user-role-menu > summary:hover {
+    border-color: #a8bddb;
+    background: #f7f9fc;
+}
+
+.user-view-button:focus-visible,
+.user-role-menu > summary:focus-visible,
+.user-role-options button:focus-visible {
+    outline: 2px solid #2563eb;
+    outline-offset: 2px;
+}
+
+.user-view-button img {
+    width: 13px;
+    height: 13px;
+    object-fit: contain;
+}
+
+.user-role-menu {
+    position: relative;
+    flex: 0 0 auto;
+    text-align: left;
+}
+
+.user-role-menu > summary::-webkit-details-marker {
+    display: none;
+}
+
+.user-role-menu > summary {
+    border-color: #1769e8;
+    background: #1769e8;
+    color: #fff;
+    font-weight: 600;
+}
+
+.user-role-menu > summary:hover {
+    border-color: #0d56c7;
+    background: #0d56c7;
+}
+
+.user-role-options {
+    position: absolute;
+    z-index: 5;
+    top: calc(100% + 6px);
+    right: 0;
+    display: grid;
+    min-width: 130px;
+    gap: 2px;
+    padding: 5px;
+    border: 1px solid #dfe6f1;
+    border-radius: 9px;
+    background: #fff;
+    box-shadow: 0 8px 20px rgb(30 58 95 / 14%);
+}
+
+.user-role-options button {
+    display: flex;
+    min-height: 34px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 0 9px;
+    border: 0;
+    border-radius: 6px;
+    background: transparent;
+    color: #234572;
+    font-size: 11px;
+    text-align: left;
+    cursor: pointer;
+}
+
+.user-role-options button:hover,
+.user-role-options .user-role-option-current {
+    background: #f1f5fb;
+}
+
+.user-role-options .user-role-option-current {
+    color: #1769e8;
+    font-weight: 600;
+}
+
+.users-table .users-empty {
+    height: 120px;
+    color: #64748b;
+    text-align: center;
+}
+
+.user-dialog-backdrop {
+    position: fixed;
+    z-index: 20;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    padding: 16px;
+    background: rgb(15 23 42 / 45%);
+}
+
+.user-detail-dialog {
+    width: min(560px, 100%);
+    overflow: hidden;
+    border: 1px solid #dfe6f1;
+    border-radius: 14px;
+    background: #fff;
+    box-shadow: 0 16px 48px rgb(15 23 42 / 20%);
+}
+
+.user-detail-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 22px;
+    border-bottom: 1px solid #eaf0f7;
+}
+
+.user-detail-eyebrow {
+    margin-bottom: 4px;
+    color: #075bea;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+}
+
+.user-detail-header h2 {
+    color: #111827;
+    font-size: 20px;
+}
+
+.user-detail-close {
+    width: 32px;
+    height: 32px;
+    border: 1px solid #d2dcef;
+    border-radius: 8px;
+    background: #fff;
+    color: #64748b;
+    font-size: 22px;
+    line-height: 1;
+}
+
+.user-detail-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 22px;
+    margin: 0;
+    padding: 24px 22px;
+}
+
+.user-detail-grid div {
+    min-width: 0;
+}
+
+.user-detail-grid dt {
+    margin-bottom: 5px;
+    color: #64748b;
+    font-size: 10px;
+}
+
+.user-detail-grid dd {
+    margin: 0;
+    color: #10213c;
+    font-size: 13px;
+    overflow-wrap: anywhere;
+}
+
+.user-detail-footer {
+    display: flex;
+    justify-content: flex-end;
+    padding: 14px 22px;
+    border-top: 1px solid #eaf0f7;
+}
+
+.user-detail-footer button {
+    min-height: 38px;
+    padding: 0 16px;
+    border: 1px solid #d2dcef;
+    border-radius: 8px;
+    background: #fff;
+    color: #234572;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+@media (max-width: 640px) {
+    .user-detail-grid {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 18px;
+    }
+}
