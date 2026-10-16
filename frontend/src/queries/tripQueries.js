@@ -1,26 +1,27 @@
-import { queryOptions } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { getPopularRoutes, getTripById, searchTrips } from "../services/tripService";
 
-// Query key theo quy ước chung: ["trips", from, to, date] / ["trip", tripId]
-export const tripKeys = {
-  search: (from, to, date) => ["trips", from ?? "", to ?? "", date ?? ""],
-  detail: (tripId) => ["trip", tripId],
-  popularRoutes: () => ["trips", "popular-routes"],
-};
+// Mỗi hook = một "câu truy vấn" lấy dữ liệu từ server.
+// queryKey là "tên" của dữ liệu trong cache: đổi from/to/date thì tự gọi lại API.
 
-export const searchTripsQuery = ({ from, to, date }) =>
-  queryOptions({
-    queryKey: tripKeys.search(from, to, date),
+export function useSearchTrips(from, to, date) {
+  return useQuery({
+    queryKey: ["trips", from, to, date],
     queryFn: () => searchTrips({ from, to, date }),
-    staleTime: 1000 * 60, // kết quả tìm kiếm đổi nhanh hơn dữ liệu tĩnh
   });
+}
 
-export const tripDetailQuery = (tripId) =>
-  queryOptions({
-    queryKey: tripKeys.detail(tripId),
+export function useTrip(tripId) {
+  return useQuery({
+    queryKey: ["trip", tripId],
     queryFn: () => getTripById(tripId),
     enabled: Boolean(tripId),
   });
+}
 
-export const popularRoutesQuery = () =>
-  queryOptions({ queryKey: tripKeys.popularRoutes(), queryFn: getPopularRoutes, staleTime: 1000 * 60 * 30 });
+export function usePopularRoutes() {
+  return useQuery({
+    queryKey: ["trips", "popular-routes"],
+    queryFn: getPopularRoutes,
+  });
+}

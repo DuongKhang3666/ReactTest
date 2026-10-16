@@ -1,10 +1,9 @@
-import { useQuery } from "@tanstack/react-query";
 import Spinner from "../../components/common/Spinner";
 import ErrorState from "../../components/common/ErrorState";
 import EmptyState from "../../components/common/EmptyState";
 import Icon from "../../components/common/Icon";
 import RouteLabel from "../../components/common/RouteLabel";
-import { dashboardQuery } from "../../queries/adminQueries";
+import { useDashboard } from "../../queries/adminQueries";
 import { cityLabel } from "../../utils/cities";
 import { formatDate, formatDateTime, formatPrice } from "../../utils/format";
 
@@ -15,15 +14,14 @@ const STATUS = {
 };
 
 export default function Dashboard() {
-  const { data, isPending, isError, error, refetch, isFetching } = useQuery(dashboardQuery());
+  const { data, isPending, isError, error, refetch, isFetching } = useDashboard();
 
   return (
-    <div className="admin__page">
-      <div className="page__head">
+    <div>
+      <div className="row">
         <h1>Dashboard</h1>
-        <button type="button" className="btn btn--outline btn--sm" onClick={() => refetch()} disabled={isFetching}>
-          <Icon name="refresh" size={16} className={isFetching ? "icon--spin" : ""} />
-          {isFetching ? "Đang làm mới..." : "Làm mới"}
+        <button type="button" className="btn btn-outline" onClick={() => refetch()} disabled={isFetching}>
+          <Icon name="refresh" size={16} /> {isFetching ? "Đang làm mới..." : "Làm mới"}
         </button>
       </div>
 
@@ -43,30 +41,29 @@ function DashboardContent({ data }) {
     { label: "Xe", value: data.totalBuses, icon: "bus" },
     { label: "Tuyến", value: data.totalRoutes, icon: "route" },
   ];
-  const maxRevenue = Math.max(1, ...data.revenueLast7Days.map((d) => d.revenue));
-  const statusTotal = Object.values(data.bookingsByStatus).reduce((a, b) => a + b, 0) || 1;
+  const maxRevenue = Math.max(...data.revenueLast7Days.map((d) => d.revenue));
 
   return (
     <>
-      <div className="grid grid--6 stats">
-        {cards.map((c) => (
-          <div className="card stat" key={c.label}>
-            <span className="stat__icon"><Icon name={c.icon} size={22} /></span>
-            <span className="muted">{c.label}</span>
-            <strong>{c.value}</strong>
+      <div className="grid">
+        {cards.map((card) => (
+          <div className="card" key={card.label}>
+            <Icon name={card.icon} size={22} className="blue" />
+            <p className="muted">{card.label}</p>
+            <strong className="big">{card.value}</strong>
           </div>
         ))}
       </div>
 
-      <div className="grid grid--2">
+      <div className="grid-2">
         <section className="card">
           <h2>Doanh thu 7 ngày gần nhất</h2>
-          <div className="chart" role="img" aria-label="Biểu đồ doanh thu 7 ngày">
-            {data.revenueLast7Days.map((d) => (
-              <div className="chart__col" key={d.date} title={`${formatDate(d.date)}: ${formatPrice(d.revenue)} · ${d.bookings} vé`}>
-                <span className="chart__value">{(d.revenue / 1_000_000).toFixed(1)}tr</span>
-                <div className="chart__bar" style={{ height: `${(d.revenue / maxRevenue) * 100}%` }} />
-                <span className="chart__label">{new Date(d.date).toLocaleDateString("vi-VN", { day: "2-digit", month: "2-digit" })}</span>
+          <div className="bars">
+            {data.revenueLast7Days.map((day) => (
+              <div key={day.date} title={`${formatDate(day.date)}: ${formatPrice(day.revenue)} · ${day.bookings} vé`}>
+                <small>{(day.revenue / 1000000).toFixed(1)}tr</small>
+                <span style={{ height: `${(day.revenue / maxRevenue) * 80}%` }} />
+                <small>{formatDate(day.date).slice(0, 5)}</small>
               </div>
             ))}
           </div>
@@ -74,43 +71,33 @@ function DashboardContent({ data }) {
 
         <section className="card">
           <h2>Vé theo trạng thái</h2>
-          <ul className="status-list">
-            {Object.entries(STATUS).map(([key, s]) => {
-              const count = data.bookingsByStatus[key] ?? 0;
-              return (
-                <li key={key}>
-                  <div className="status-list__row">
-                    <span className={`badge ${s.cls}`}>{s.label}</span>
-                    <strong>{count}</strong>
-                  </div>
-                  <div className="progress"><div className={`progress__bar ${s.cls}`} style={{ width: `${(count / statusTotal) * 100}%` }} /></div>
-                </li>
-              );
-            })}
-          </ul>
+          {Object.entries(STATUS).map(([key, status]) => (
+            <p className="row" key={key}>
+              <span className={`badge ${status.cls}`}>{status.label}</span>
+              <strong>{data.bookingsByStatus[key] ?? 0}</strong>
+            </p>
+          ))}
         </section>
       </div>
 
-      <div className="grid grid--2">
+      <div className="grid-2">
         <section className="card">
           <h2>Chuyến sắp khởi hành</h2>
           {data.upcomingTrips.length === 0 ? (
             <EmptyState icon="calendar" title="Không có chuyến sắp tới" />
           ) : (
-            <div className="table-wrap">
-              <table className="table">
-                <thead><tr><th>Tuyến</th><th>Khởi hành</th><th>Còn chỗ</th></tr></thead>
-                <tbody>
-                  {data.upcomingTrips.map((t) => (
-                    <tr key={t.id}>
-                      <td><RouteLabel from={cityLabel(t.route.departureCity)} to={cityLabel(t.route.destinationCity)} /></td>
-                      <td>{formatDateTime(t.departureTime)}</td>
-                      <td>{t.availableSeats}/{t.bus.seatCount}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+            <table>
+              <thead><tr><th>Tuyến</th><th>Khởi hành</th><th>Còn chỗ</th></tr></thead>
+              <tbody>
+                {data.upcomingTrips.map((trip) => (
+                  <tr key={trip.id}>
+                    <td><RouteLabel from={cityLabel(trip.route.departureCity)} to={cityLabel(trip.route.destinationCity)} /></td>
+                    <td>{formatDateTime(trip.departureTime)}</td>
+                    <td>{trip.availableSeats}/{trip.bus.seatCount}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           )}
         </section>
 
@@ -119,21 +106,19 @@ function DashboardContent({ data }) {
           {data.recentBookings.length === 0 ? (
             <EmptyState icon="ticket" title="Chưa có vé nào" />
           ) : (
-            <div className="table-wrap">
-              <table className="table">
-                <thead><tr><th>Mã vé</th><th>Khách</th><th>Tổng tiền</th><th>Trạng thái</th></tr></thead>
-                <tbody>
-                  {data.recentBookings.map((b) => (
-                    <tr key={b.id}>
-                      <td>{b.bookingCode}</td>
-                      <td>{b.customerName}</td>
-                      <td>{formatPrice(b.totalAmount)}</td>
-                      <td><span className={`badge ${STATUS[b.status]?.cls ?? ""}`}>{STATUS[b.status]?.label ?? b.status}</span></td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+            <table>
+              <thead><tr><th>Mã vé</th><th>Khách</th><th>Tổng tiền</th><th>Trạng thái</th></tr></thead>
+              <tbody>
+                {data.recentBookings.map((booking) => (
+                  <tr key={booking.id}>
+                    <td>{booking.bookingCode}</td>
+                    <td>{booking.customerName}</td>
+                    <td>{formatPrice(booking.totalAmount)}</td>
+                    <td><span className={`badge ${STATUS[booking.status]?.cls}`}>{STATUS[booking.status]?.label}</span></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           )}
         </section>
       </div>

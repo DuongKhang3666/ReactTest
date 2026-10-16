@@ -1,12 +1,11 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
 import SearchForm from "../../components/common/SearchForm";
 import Spinner from "../../components/common/Spinner";
 import ErrorState from "../../components/common/ErrorState";
-import EmptyState from "../../components/common/EmptyState";
 import Icon from "../../components/common/Icon";
 import RouteLabel from "../../components/common/RouteLabel";
-import { popularRoutesQuery } from "../../queries/tripQueries";
+import { usePopularRoutes } from "../../queries/tripQueries";
+import { cityLabel } from "../../utils/cities";
 import { formatDuration, formatPrice, toDateInputValue } from "../../utils/format";
 
 const FEATURES = [
@@ -17,13 +16,14 @@ const FEATURES = [
 
 export default function Home() {
   const navigate = useNavigate();
-  const { data: routes, isPending, isError, error, refetch } = useQuery(popularRoutesQuery());
+  const { data: routes, isPending, isError, error, refetch } = usePopularRoutes();
 
-  const goSearch = ({ from, to, date }) => {
+  // Bấm "Tìm chuyến": chuyển sang trang /trips, điều kiện tìm đặt trên URL
+  const handleSearch = ({ from, to, date }) => {
     const params = new URLSearchParams();
     if (from) params.set("from", from);
     if (to) params.set("to", to);
-    if (date) params.set("date", date);
+    params.set("date", date);
     navigate(`/trips?${params.toString()}`);
   };
 
@@ -31,40 +31,33 @@ export default function Home() {
     <>
       <section className="hero">
         <div className="container">
-          <h1>Đặt vé xe đường dài<br />dễ dàng, nhanh chóng</h1>
+          <h1>Đặt vé xe đường dài dễ dàng, nhanh chóng</h1>
           <p>Hàng trăm chuyến mỗi ngày trên các tuyến phổ biến toàn quốc.</p>
-          <div className="card hero__search"><SearchForm onSubmit={goSearch} /></div>
+          <div className="card"><SearchForm onSubmit={handleSearch} /></div>
         </div>
       </section>
 
-      <section className="container page">
+      <section className="container">
         <h2>Tuyến phổ biến</h2>
         {isPending && <Spinner />}
         {isError && <ErrorState error={error} onRetry={refetch} />}
-        {routes?.length === 0 && <EmptyState title="Chưa có tuyến phổ biến" />}
-        {routes?.length > 0 && (
-          <div className="grid grid--4">
-            {routes.map((r) => (
-              <Link
-                key={`${r.from}-${r.to}`}
-                className="card route-card"
-                to={`/trips?from=${r.from}&to=${r.to}&date=${toDateInputValue()}`}
-              >
-                <strong><RouteLabel from={r.fromLabel} to={r.toLabel} stacked /></strong>
-                <span className="muted">{formatDuration(r.durationMinutes)} · từ {formatPrice(r.fromPrice)}</span>
+        {routes && (
+          <div className="grid">
+            {routes.map((route) => (
+              <Link key={`${route.from}-${route.to}`} className="card" to={`/trips?from=${route.from}&to=${route.to}&date=${toDateInputValue()}`}>
+                <p><strong><RouteLabel from={cityLabel(route.from)} to={cityLabel(route.to)} /></strong></p>
+                <p className="muted">{formatDuration(route.durationMinutes)} · từ {formatPrice(route.fromPrice)}</p>
               </Link>
             ))}
           </div>
         )}
-      </section>
 
-      <section className="container page">
-        <div className="grid grid--3">
-          {FEATURES.map((f) => (
-            <div className="card feature" key={f.title}>
-              <div className="feature__icon"><Icon name={f.icon} size={32} /></div>
-              <strong>{f.title}</strong>
-              <p className="muted">{f.text}</p>
+        <div className="grid">
+          {FEATURES.map((feature) => (
+            <div className="card" key={feature.title}>
+              <Icon name={feature.icon} size={32} className="blue" />
+              <p><strong>{feature.title}</strong></p>
+              <p className="muted">{feature.text}</p>
             </div>
           ))}
         </div>

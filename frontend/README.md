@@ -1,54 +1,45 @@
-# Frontend – VéXeOnline (React + Vite + TanStack Query)
+# Frontend - VéXeOnline (React + Vite + TanStack Query)
 
-## Chạy
+## Chạy thử
 ```bash
-cp .env.example .env     # lần đầu
+cp .env.example .env     # Windows: copy .env.example .env
 npm install
-npm run dev              # http://localhost:5173
-npm run lint && npm run build
+npm run dev              # mở http://localhost:5173
 ```
+`VITE_USE_MOCK=true` (mặc định): chạy bằng dữ liệu giả, **không cần backend**.
+Khi backend xong: đặt `VITE_USE_MOCK=false` và `VITE_API_BASE_URL=http://localhost:8080/api`.
 
-`VITE_USE_MOCK=true` (mặc định) → chạy hoàn toàn bằng mock data, **không cần backend**.  
-Khi backend sẵn sàng: đặt `VITE_USE_MOCK=false` và `VITE_API_BASE_URL=http://localhost:8080/api`.
+Tài khoản thử: khách `a@example.com / 123456`, admin `admin@example.com / admin123`.
 
-Tài khoản mock: khách `a@example.com / 123456`, admin `admin@example.com / admin123`.
+Kiểm tra code: `npm run lint` và `npm run build`.
 
-## Phần FE1 đã hoàn thành
+## Phần FE1
 | Hạng mục | File chính |
 |---|---|
-| Login / Register / Logout | `pages/auth/*`, `contexts/AuthContext.jsx`, `services/authService.js` |
-| ProtectedRoute / AdminRoute / GuestRoute | `routes/*` |
-| Layout (Main + Admin) | `layouts/*`, `components/layout/*` |
-| Home | `pages/customer/Home.jsx` |
-| Search + Filter/Sort | `pages/customer/SearchTrips.jsx` |
-| Profile | `pages/customer/Profile.jsx` |
-| Admin Dashboard | `pages/admin/Dashboard.jsx` |
-| Query/service | `queries/{queryClient,tripQueries,adminQueries,authQueries}.js`, `services/*` |
+| Đăng nhập / Đăng ký / Đăng xuất | `pages/auth/`, `contexts/AuthContext.jsx` |
+| Chặn trang theo đăng nhập / quyền admin | `routes/ProtectedRoute.jsx`, `routes/AdminRoute.jsx` |
+| Trang chủ, Tìm chuyến, Lọc, Sắp xếp | `pages/customer/Home.jsx`, `SearchTrips.jsx`, `utils/tripFilters.js` |
+| Hồ sơ cá nhân | `pages/customer/Profile.jsx` |
+| Dashboard admin | `pages/admin/Dashboard.jsx` |
+| Gọi API / dữ liệu giả | `services/*.js`, `services/mockData.js` |
+| useQuery / useMutation | `queries/*.js` và các page |
 
-## TanStack Query trong FE1
-- `useQuery` + `queryOptions`: tìm chuyến `["trips", from, to, date]`, tuyến phổ biến, dashboard `["admin","dashboard"]`, người dùng hiện tại `["users","me"]`.
-- `useMutation`: login, register, cập nhật profile (`setQueryData(["users","me"])` sau khi thành công).
-- Server state: dữ liệu chuyến/dashboard/user. Client/UI state (`useState`): form input, bộ lọc, sắp xếp, menu mobile.
-- Mọi danh sách đều có loading / error (nút Thử lại) / empty state.
-- 401 → `apiClient` phát sự kiện `auth:expired` → AuthContext đăng xuất và xóa cache.
+Xem `GIAI_THICH_CODE.md` để hiểu luồng chạy và các câu hỏi thường gặp khi bảo vệ.
 
-## Dùng chung cho FE2/FE3
-- `services/apiClient.js` tự gắn `Authorization: Bearer <token>`.
-- `useAuth()` → `{ user, isAuthenticated, isAdmin, login, register, logout }`.
-- `tripQueries.js` đã có `tripDetailQuery(id)` và `tripKeys` cho FE2.
-- `AppRoutes.jsx`: các route của FE2/FE3 đang là `PlaceholderPage` – chỉ cần thay `element`, giữ nguyên `path`.
-- `components/common`: `Spinner`, `ErrorState`, `EmptyState`, `Alert`, `TripCard`, `SearchForm`.
-- `utils/format.js`: `formatPrice`, `formatDateTime`, `getErrorMessage`, ...
+## Dùng chung cho FE2 / FE3
+- `useAuth()` trả về `{ user, isAuthenticated, isAdmin, login, register, logout, updateUser }`.
+- `services/apiClient.js` tự gắn `Authorization: Bearer <token>` vào mọi request.
+- `queries/tripQueries.js` có sẵn `useTrip(id)` cho trang chi tiết chuyến.
+- Các route của FE2/FE3 trong `routes/AppRoutes.jsx` đang là `PlaceholderPage`, chỉ cần thay `element`.
+- Component dùng chung: `components/common/` (Spinner, ErrorState, EmptyState, Alert, TripCard, SearchForm, Icon).
 
-## Đề xuất API contract cho Backend (FE1 đang dùng)
+## API mà FE1 đang dùng (đề xuất cho backend)
 ```
-POST /auth/register {username,email,password}  -> {token, user}
-POST /auth/login    {email,password}           -> {token, user}
-GET  /users/me                                 -> user
-PUT  /users/me      {fullName, phone}          -> user            (mới)
-GET  /trips?from=&to=&date=                    -> Trip[]
-GET  /trips/popular-routes                     -> [{from,to,fromLabel,toLabel,durationMinutes,fromPrice}]  (mới)
-GET  /admin/dashboard                          -> thống kê (xem services/adminService.js)  (mới)
+POST /auth/register   { username, email, password }  ->  { token, user }
+POST /auth/login      { email, password }            ->  { token, user }
+PUT  /users/me        { fullName, phone }            ->  user
+GET  /trips?from=&to=&date=                          ->  Trip[]
+GET  /trips/popular-routes                           ->  [{ from, to, durationMinutes, fromPrice }]
+GET  /admin/dashboard                                ->  số liệu thống kê (xem services/adminService.js)
 ```
-`Trip = { id, departureTime, arrivalTime, price, status, availableSeats, route{...}, bus{...} }` – chi tiết trong `services/tripService.js`.  
-Giá trị `from`/`to` (TPHCM, DaNang...) được cấu hình tại `utils/cities.js`.
+Cấu trúc `Trip` ghi trong `services/tripService.js`. Mã thành phố (`TPHCM`, `DaNang`...) cấu hình ở `utils/cities.js`.

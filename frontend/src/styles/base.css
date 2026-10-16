@@ -1,0 +1,14 @@
+/* Chữ và khung chung */
+body { background: #f4f6fb; color: #1c2333; }
+#root { display: flex; flex-direction: column; }
+main { flex: 1; }
+h1 { font-size: 1.6rem; margin-bottom: 8px; }
+h2 { font-size: 1.1rem; margin-bottom: 12px; }
+p { margin-bottom: 8px; }
+p a { color: var(--blue); }
+small { color: var(--gray); font-size: 0.75rem; }
+.muted { color: var(--gray); }
+.blue { color: var(--blue); }
+.right { text-align: right; }
+.big { font-size: 1.3rem; font-weight: 700; }
+.icon { display: inline-block; flex: none; vertical-align: middle; }

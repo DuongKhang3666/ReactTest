@@ -3,7 +3,6 @@ import MainLayout from "../layouts/MainLayout";
 import AdminLayout from "../layouts/AdminLayout";
 import ProtectedRoute from "./ProtectedRoute";
 import AdminRoute from "./AdminRoute";
-import GuestRoute from "./GuestRoute";
 import PlaceholderPage from "../components/common/PlaceholderPage";
 
 import Login from "../pages/auth/Login";
@@ -26,10 +25,8 @@ export default function AppRoutes() {
           <Route path="/trips" element={<SearchTrips />} />
           <Route path="/trips/:id" element={<PlaceholderPage title="Chi tiết chuyến & chọn ghế" owner="FE2" />} />
 
-          <Route element={<GuestRoute />}>
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-          </Route>
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
 
           <Route element={<ProtectedRoute />}>
             <Route path="/profile" element={<Profile />} />

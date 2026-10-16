@@ -1,13 +1,14 @@
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
-import Spinner from "../components/common/Spinner";
 
-/** Chỉ cho người đã đăng nhập. Chưa đăng nhập -> /login và nhớ trang định vào. */
+// Bọc các trang yêu cầu đăng nhập. Chưa đăng nhập thì chuyển sang /login
+// và nhớ trang đang định vào để quay lại sau khi đăng nhập.
 export default function ProtectedRoute() {
-  const { isAuthenticated, isLoading } = useAuth();
+  const { isAuthenticated } = useAuth();
   const location = useLocation();
 
-  if (isLoading) return <Spinner label="Đang xác thực..." />;
-  if (!isAuthenticated) return <Navigate to="/login" replace state={{ from: location }} />;
+  if (!isAuthenticated) {
+    return <Navigate to="/login" replace state={{ from: location }} />;
+  }
   return <Outlet />;
 }

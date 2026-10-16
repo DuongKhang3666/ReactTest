@@ -1,4 +1,4 @@
-import { NavLink, Outlet, Link, useNavigate } from "react-router-dom";
+import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 import Icon from "../components/common/Icon";
 
@@ -11,30 +11,29 @@ const ITEMS = [
   { to: "/admin/users", icon: "users", label: "Người dùng" },
 ];
 
+// Khung trang admin: menu bên trái, nội dung bên phải
 export default function AdminLayout() {
-  const { user, logout } = useAuth();
+  const { logout } = useAuth();
   const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/login", { replace: true });
+  };
+
   return (
     <div className="admin">
-      <aside className="admin__sidebar">
-        <Link to="/admin/dashboard" className="brand brand--light"><Icon name="bus" size={24} /> <span>Admin</span></Link>
-        <nav className="admin__nav">
-          {ITEMS.map((i) => (
-            <NavLink key={i.to} to={i.to} className={({ isActive }) => (isActive ? "admin__link is-active" : "admin__link")}>
-              <Icon name={i.icon} size={18} />
-              {i.label}
-            </NavLink>
-          ))}
-        </nav>
-        <div className="admin__footer">
-          <div className="muted-light">{user?.fullName || user?.username}</div>
-          <Link to="/" className="admin__link"><Icon name="arrow-left" size={16} /> Về trang khách</Link>
-          <button type="button" className="admin__link admin__logout" onClick={() => { logout(); navigate("/login", { replace: true }); }}>
-            Đăng xuất
-          </button>
-        </div>
+      <aside>
+        <Link to="/admin/dashboard" className="link blue brand"><Icon name="bus" size={24} /> Admin</Link>
+        {ITEMS.map((item) => (
+          <NavLink key={item.to} to={item.to} className="link">
+            <Icon name={item.icon} size={18} /> {item.label}
+          </NavLink>
+        ))}
+        <Link to="/" className="link"><Icon name="arrow-left" size={16} /> Về trang khách</Link>
+        <button type="button" className="link" onClick={handleLogout}>Đăng xuất</button>
       </aside>
-      <main className="admin__content"><Outlet /></main>
+      <main><Outlet /></main>
     </div>
   );
 }

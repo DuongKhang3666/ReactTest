@@ -2,16 +2,15 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "./queries/queryClient";
 import { AuthProvider } from "./contexts/AuthContext";
 import AppRoutes from "./routes/AppRoutes";
-import ErrorBoundary from "./components/common/ErrorBoundary";
 
+// QueryClientProvider: cho phép dùng TanStack Query ở mọi nơi
+// AuthProvider: cho phép dùng useAuth() ở mọi nơi
 export default function App() {
   return (
-    <ErrorBoundary>
-      <QueryClientProvider client={queryClient}>
-        <AuthProvider>
-          <AppRoutes />
-        </AuthProvider>
-      </QueryClientProvider>
-    </ErrorBoundary>
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <AppRoutes />
+      </AuthProvider>
+    </QueryClientProvider>
   );
 }

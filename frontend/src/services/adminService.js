@@ -1,18 +1,21 @@
 import apiClient, { USE_MOCK } from "./apiClient";
-import { buildDashboardStats, mockDelay } from "./mock/mockDb";
+import { getMockDashboard } from "./mockData";
 
 /*
- * Contract (FE1 đề xuất - BE1/BE2 xác nhận):
- *  GET /admin/dashboard -> {
- *    totalUsers, totalBuses, totalRoutes, totalTrips, totalBookings, totalRevenue,
- *    bookingsByStatus: { PENDING, CONFIRMED, CANCELLED },
- *    revenueLast7Days: [{ date, revenue, bookings }],
- *    upcomingTrips: Trip[],
- *    recentBookings: [{ id, bookingCode, customerName, route, totalAmount, status, bookedAt }]
- *  }
+ * API: GET /admin/dashboard  ->  {
+ *   totalUsers, totalBuses, totalRoutes, totalTrips, totalBookings, totalRevenue,
+ *   bookingsByStatus: { PENDING, CONFIRMED, CANCELLED },
+ *   revenueLast7Days: [{ date, revenue, bookings }],
+ *   upcomingTrips: Trip[],
+ *   recentBookings: [{ id, bookingCode, customerName, route, totalAmount, status }]
+ * }
  */
-export async function getDashboardStats() {
-  if (!USE_MOCK) return (await apiClient.get("/admin/dashboard")).data;
-  await mockDelay(450);
-  return buildDashboardStats();
+export async function getDashboard() {
+  if (!USE_MOCK) {
+    const response = await apiClient.get("/admin/dashboard");
+    return response.data;
+  }
+
+  await new Promise((resolve) => setTimeout(resolve, 300));
+  return getMockDashboard();
 }

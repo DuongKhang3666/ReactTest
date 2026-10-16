@@ -29,19 +29,6 @@ const PATHS = {
       <path d="M16 3.13a4 4 0 0 1 0 7.75" />
     </>
   ),
-  menu: (
-    <>
-      <line x1="4" x2="20" y1="6" y2="6" />
-      <line x1="4" x2="20" y1="12" y2="12" />
-      <line x1="4" x2="20" y1="18" y2="18" />
-    </>
-  ),
-  close: (
-    <>
-      <path d="M18 6 6 18" />
-      <path d="m6 6 12 12" />
-    </>
-  ),
   "arrow-right": (
     <>
       <path d="M5 12h14" />
@@ -52,14 +39,6 @@ const PATHS = {
     <>
       <path d="m12 19-7-7 7-7" />
       <path d="M19 12H5" />
-    </>
-  ),
-  swap: (
-    <>
-      <path d="M8 3 4 7l4 4" />
-      <path d="M4 7h16" />
-      <path d="m16 21 4-4-4-4" />
-      <path d="M20 17H4" />
     </>
   ),
   refresh: (
