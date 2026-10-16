@@ -1,0 +1,52 @@
+.bus-floor {
+    width: max-content;
+    flex-shrink: 0;
+}
+
+.bus-floor__body {
+    background: #f3f3f3;
+    border-radius: 32px 32px 8px 8px;
+    padding: 20px 14px;
+    border: 1px solid #ddd;
+    box-sizing: border-box;
+}
+
+.floor-title {
+    margin: 0 0 12px;
+    text-align: center;
+    font-size: 17px;
+    font-weight: 500;
+    color: #333;
+}
+
+.bus-floor__front {
+    display: flex;
+    align-items: center;
+    height: 40px;
+    margin-bottom: 12px;
+}
+
+.bus-floor__wheel {
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
+}
+
+.bus-floor__wheel--placeholder {
+    visibility: hidden;
+}
+
+.bus-layout {
+    display: grid;
+    justify-content: center;
+    align-items: center;
+    gap: 8px 6px;
+    grid-auto-columns: 34px;
+    grid-auto-rows: 46px;
+}
+
+.seat-position {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
