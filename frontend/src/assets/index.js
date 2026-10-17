@@ -1,9 +1,0 @@
-export { default as display } from "./display.png";
-export { default as plugin } from "./plugin.png";
-export { default as snowflake } from "./snowflake.png";
-export { default as water } from "./water.png";
-export { default as wifi } from "./wifi.png";
-export { default as toilet } from "./toilets.png";
-export { default as armchair } from "./armchair.png";
-export { default as selectedBox } from "./selected_box.png";
-export { default as unavailable } from "./unavailable.png";

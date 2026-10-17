@@ -1,8 +1,0 @@
-/* Trang chủ, tìm chuyến */
-.hero { background: #1257b0; color: #fff; }
-.hero h1 { font-size: 2rem; }
-.hero .card { color: #1c2333; }
-.results { display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-start; }
-.results > aside { flex: 1 1 220px; }
-.results > section { flex: 3 1 400px; }
-.price { color: #e8590c; font-size: 1.2rem; font-weight: 700; }

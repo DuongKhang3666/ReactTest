@@ -2,12 +2,21 @@ import apiClient, { USE_MOCK, USER_KEY } from "./apiClient";
 import { MOCK_USERS } from "./mockData";
 
 /*
- * API (đề xuất cho backend):
- *   POST /auth/register  { username, email, password }   ->  { token, user }
- *   POST /auth/login     { email, password }             ->  { token, user }
- *   PUT  /users/me       { fullName, phone }             ->  user
- * user = { id, username, email, role: "CUSTOMER" | "ADMIN", fullName, phone }
+ * API THẬT của backend (nhánh main):
+ *   POST /auth/register  { username, email, password }  ->  201 { token: null, id, username, email, fullName, phone, role }
+ *   POST /auth/login     { email, password }            ->  200 { token, id, username, email, fullName, phone, role }
+ *   GET  /users/me                                      ->  { id, username, email, fullName, phone, role }
+ * Backend CHƯA có PUT /users/me nên chưa sửa được hồ sơ (xem PROFILE_EDITABLE).
+ * Ở đây ta chuyển về dạng { token, user } cho phần còn lại của giao diện dùng.
  */
+
+// Có sửa được hồ sơ không? Chỉ khi chạy mock (backend chưa có API cập nhật hồ sơ).
+export const PROFILE_EDITABLE = USE_MOCK;
+
+// { token, id, username, ... } -> { token, user: { id, username, ... } }
+function toSession({ token, ...user }) {
+  return { token, user };
+}
 
 // ----- Phần giả lập: lưu danh sách user vào localStorage để đăng ký/đăng nhập thử được -----
 const wait = (ms = 300) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -31,7 +40,7 @@ function withoutPassword(user) {
 export async function login({ email, password }) {
   if (!USE_MOCK) {
     const response = await apiClient.post("/auth/login", { email, password });
-    return response.data;
+    return toSession(response.data);
   }
 
   await wait();
@@ -42,8 +51,9 @@ export async function login({ email, password }) {
 
 export async function register({ username, email, password }) {
   if (!USE_MOCK) {
-    const response = await apiClient.post("/auth/register", { username, email, password });
-    return response.data;
+    // Backend đăng ký xong KHÔNG trả token -> đăng nhập luôn để lấy token
+    await apiClient.post("/auth/register", { username, email, password });
+    return login({ email, password });
   }
 
   await wait();
@@ -58,8 +68,7 @@ export async function register({ username, email, password }) {
 
 export async function updateMe({ fullName, phone }) {
   if (!USE_MOCK) {
-    const response = await apiClient.put("/users/me", { fullName, phone });
-    return response.data;
+    throw new Error("Backend chưa hỗ trợ cập nhật hồ sơ (chưa có API PUT /users/me).");
   }
 
   await wait();

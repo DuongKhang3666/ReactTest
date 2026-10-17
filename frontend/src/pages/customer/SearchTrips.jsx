@@ -13,7 +13,7 @@ import { formatDate, toDateInputValue } from "../../utils/format";
 import { DEFAULT_FILTERS, SORT_OPTIONS, filterTrips, sortTrips } from "../../utils/tripFilters";
 
 export default function SearchTrips() {
-  // Điều kiện tìm (from, to, date) nằm trên URL: /trips?from=TPHCM&to=DaNang&date=2026-10-05
+  // Điều kiện tìm (from, to, date) nằm trên URL: /trips?from=TP.HCM&to=Đà Nẵng&date=2026-10-05
   const [searchParams, setSearchParams] = useSearchParams();
   const from = searchParams.get("from") ?? "";
   const to = searchParams.get("to") ?? "";

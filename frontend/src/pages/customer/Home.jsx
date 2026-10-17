@@ -38,13 +38,13 @@ export default function Home() {
       </section>
 
       <section className="container">
-        <h2>Tuyến phổ biến</h2>
+        {routes?.length > 0 && <h2>Tuyến phổ biến</h2>}
         {isPending && <Spinner />}
         {isError && <ErrorState error={error} onRetry={refetch} />}
-        {routes && (
+        {routes?.length > 0 && (
           <div className="grid">
             {routes.map((route) => (
-              <Link key={`${route.from}-${route.to}`} className="card" to={`/trips?from=${route.from}&to=${route.to}&date=${toDateInputValue()}`}>
+              <Link key={`${route.from}-${route.to}`} className="card" to={`/trips?${new URLSearchParams({ from: route.from, to: route.to, date: toDateInputValue() })}`}>
                 <p><strong><RouteLabel from={cityLabel(route.from)} to={cityLabel(route.to)} /></strong></p>
                 <p className="muted">{formatDuration(route.durationMinutes)} · từ {formatPrice(route.fromPrice)}</p>
               </Link>

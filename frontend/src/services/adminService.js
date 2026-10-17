@@ -2,8 +2,9 @@ import apiClient, { USE_MOCK } from "./apiClient";
 import { getMockDashboard } from "./mockData";
 
 /*
- * API: GET /admin/dashboard  ->  {
- *   totalUsers, totalBuses, totalRoutes, totalTrips, totalBookings, totalRevenue,
+ * API: GET /admin/dashboard  ->  backend hiện chỉ trả { totalUsers, totalBuses, totalRoutes, totalTrips }.
+ * Các trường còn lại bên dưới là TUỲ CHỌN: có thì Dashboard hiển thị, không có thì tự ẩn.
+ *   totalBookings, totalRevenue,
  *   bookingsByStatus: { PENDING, CONFIRMED, CANCELLED },
  *   revenueLast7Days: [{ date, revenue, bookings }],
  *   upcomingTrips: Trip[],

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { useAuth } from "../../hooks/useAuth";
 import Alert from "../../components/common/Alert";
-import { updateMe } from "../../services/authService";
+import { PROFILE_EDITABLE, updateMe } from "../../services/authService";
 import { getErrorMessage } from "../../utils/format";
 
 export default function Profile() {
@@ -30,6 +30,16 @@ export default function Profile() {
         <p><strong>Email:</strong> {user.email}</p>
         <p><strong>Vai trò:</strong> <span className="badge">{user.role === "ADMIN" ? "Quản trị viên" : "Khách hàng"}</span></p>
 
+        {!PROFILE_EDITABLE && (
+          <>
+            <h2>Thông tin cá nhân</h2>
+            <p><strong>Họ và tên:</strong> {user.fullName || "Chưa cập nhật"}</p>
+            <p><strong>Số điện thoại:</strong> {user.phone || "Chưa cập nhật"}</p>
+            <p className="muted">Chức năng chỉnh sửa hồ sơ sẽ có khi backend bổ sung API PUT /users/me.</p>
+          </>
+        )}
+
+        {PROFILE_EDITABLE && (
         <form onSubmit={handleSubmit} noValidate>
           <h2>Thông tin cá nhân</h2>
           <Alert>{mutation.isError && getErrorMessage(mutation.error)}</Alert>
@@ -50,6 +60,7 @@ export default function Profile() {
             {mutation.isPending ? "Đang lưu..." : "Lưu thay đổi"}
           </button>
         </form>
+        )}
       </div>
     </div>
   );

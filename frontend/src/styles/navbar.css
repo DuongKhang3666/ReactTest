@@ -1,8 +1,0 @@
-/* Thanh menu, chân trang */
-header { background: #fff; border-bottom: 1px solid var(--line); }
-header .container { padding-top: 10px; padding-bottom: 10px; }
-footer { padding: 16px; text-align: center; color: var(--gray); background: #fff; border-top: 1px solid var(--line); }
-nav { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; }
-.link { display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; border: 0; border-radius: 6px; background: none; text-align: left; }
-.link.active { background: #e8f0fe; color: var(--blue); }
-.brand { font-size: 1.2rem; font-weight: 700; }

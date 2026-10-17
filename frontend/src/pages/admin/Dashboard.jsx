@@ -1,3 +1,4 @@
+import "../../styles/fe1.css";
 import Spinner from "../../components/common/Spinner";
 import ErrorState from "../../components/common/ErrorState";
 import EmptyState from "../../components/common/EmptyState";
@@ -17,7 +18,7 @@ export default function Dashboard() {
   const { data, isPending, isError, error, refetch, isFetching } = useDashboard();
 
   return (
-    <div>
+    <div className="fe1">
       <div className="row">
         <h1>Dashboard</h1>
         <button type="button" className="btn btn-outline" onClick={() => refetch()} disabled={isFetching}>
@@ -33,15 +34,21 @@ export default function Dashboard() {
 }
 
 function DashboardContent({ data }) {
+  // Backend hiện chỉ trả 4 số tổng; các trường còn lại có thể không có -> kiểm tra trước khi hiển thị
   const cards = [
-    { label: "Doanh thu", value: formatPrice(data.totalRevenue), icon: "wallet" },
+    { label: "Doanh thu", value: data.totalRevenue == null ? null : formatPrice(data.totalRevenue), icon: "wallet" },
     { label: "Tổng vé đặt", value: data.totalBookings, icon: "ticket" },
     { label: "Chuyến xe", value: data.totalTrips, icon: "calendar" },
     { label: "Người dùng", value: data.totalUsers, icon: "users" },
     { label: "Xe", value: data.totalBuses, icon: "bus" },
     { label: "Tuyến", value: data.totalRoutes, icon: "route" },
-  ];
-  const maxRevenue = Math.max(...data.revenueLast7Days.map((d) => d.revenue));
+  ].filter((card) => card.value != null);
+
+  const revenueLast7Days = data.revenueLast7Days ?? [];
+  const maxRevenue = Math.max(1, ...revenueLast7Days.map((d) => d.revenue));
+  const bookingsByStatus = data.bookingsByStatus;
+  const upcomingTrips = data.upcomingTrips;
+  const recentBookings = data.recentBookings;
 
   return (
     <>
@@ -55,11 +62,13 @@ function DashboardContent({ data }) {
         ))}
       </div>
 
+      {(revenueLast7Days.length > 0 || bookingsByStatus) && (
       <div className="grid-2">
+        {revenueLast7Days.length > 0 && (
         <section className="card">
           <h2>Doanh thu 7 ngày gần nhất</h2>
           <div className="bars">
-            {data.revenueLast7Days.map((day) => (
+            {revenueLast7Days.map((day) => (
               <div key={day.date} title={`${formatDate(day.date)}: ${formatPrice(day.revenue)} · ${day.bookings} vé`}>
                 <small>{(day.revenue / 1000000).toFixed(1)}tr</small>
                 <span style={{ height: `${(day.revenue / maxRevenue) * 80}%` }} />
@@ -68,48 +77,56 @@ function DashboardContent({ data }) {
             ))}
           </div>
         </section>
+        )}
 
+        {bookingsByStatus && (
         <section className="card">
           <h2>Vé theo trạng thái</h2>
           {Object.entries(STATUS).map(([key, status]) => (
             <p className="row" key={key}>
               <span className={`badge ${status.cls}`}>{status.label}</span>
-              <strong>{data.bookingsByStatus[key] ?? 0}</strong>
+              <strong>{bookingsByStatus[key] ?? 0}</strong>
             </p>
           ))}
         </section>
+        )}
       </div>
+      )}
 
+      {(upcomingTrips || recentBookings) && (
       <div className="grid-2">
+        {upcomingTrips && (
         <section className="card">
           <h2>Chuyến sắp khởi hành</h2>
-          {data.upcomingTrips.length === 0 ? (
+          {upcomingTrips.length === 0 ? (
             <EmptyState icon="calendar" title="Không có chuyến sắp tới" />
           ) : (
             <table>
               <thead><tr><th>Tuyến</th><th>Khởi hành</th><th>Còn chỗ</th></tr></thead>
               <tbody>
-                {data.upcomingTrips.map((trip) => (
+                {upcomingTrips.map((trip) => (
                   <tr key={trip.id}>
                     <td><RouteLabel from={cityLabel(trip.route.departureCity)} to={cityLabel(trip.route.destinationCity)} /></td>
                     <td>{formatDateTime(trip.departureTime)}</td>
-                    <td>{trip.availableSeats}/{trip.bus.seatCount}</td>
+                    <td>{trip.availableSeats ?? "-"}/{trip.bus.seatCount}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           )}
         </section>
+        )}
 
+        {recentBookings && (
         <section className="card">
           <h2>Vé đặt gần đây</h2>
-          {data.recentBookings.length === 0 ? (
+          {recentBookings.length === 0 ? (
             <EmptyState icon="ticket" title="Chưa có vé nào" />
           ) : (
             <table>
               <thead><tr><th>Mã vé</th><th>Khách</th><th>Tổng tiền</th><th>Trạng thái</th></tr></thead>
               <tbody>
-                {data.recentBookings.map((booking) => (
+                {recentBookings.map((booking) => (
                   <tr key={booking.id}>
                     <td>{booking.bookingCode}</td>
                     <td>{booking.customerName}</td>
@@ -121,7 +138,9 @@ function DashboardContent({ data }) {
             </table>
           )}
         </section>
+        )}
       </div>
+      )}
     </>
   );
 }

@@ -1,5 +1,0 @@
-/* Nút bấm */
-.btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 8px 16px; border: 1px solid var(--blue); border-radius: 6px; background: var(--blue); color: #fff; font-weight: 600; }
-.btn:disabled { opacity: 0.5; cursor: not-allowed; }
-.btn-outline { background: #fff; color: var(--blue); }
-.narrow .btn { width: 100%; }

@@ -6,7 +6,8 @@ import { formatDuration, formatPrice, formatTime } from "../../utils/format";
 
 export default function TripCard({ trip }) {
   const { route, bus } = trip;
-  const soldOut = trip.availableSeats <= 0;
+  const hasSeatInfo = typeof trip.availableSeats === "number"; // backend có thể chưa trả số chỗ trống
+  const soldOut = hasSeatInfo && trip.availableSeats <= 0;
 
   return (
     <article className="card row">
@@ -23,7 +24,7 @@ export default function TripCard({ trip }) {
         <p className="price">{formatPrice(trip.price)}</p>
         <p>
           <span className={soldOut ? "badge badge--danger" : "badge badge--ok"}>
-            {soldOut ? "Hết chỗ" : `Còn ${trip.availableSeats} chỗ`}
+            {soldOut ? "Hết chỗ" : hasSeatInfo ? `Còn ${trip.availableSeats} chỗ` : `${bus.seatCount} chỗ`}
           </span>
         </p>
         {soldOut ? (

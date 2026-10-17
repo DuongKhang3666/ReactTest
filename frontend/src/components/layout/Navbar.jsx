@@ -18,7 +18,7 @@ export default function Navbar() {
           <Link to="/" className="link blue brand"><Icon name="bus" size={24} /> VéXeOnline</Link>
           <NavLink to="/" end className="link">Trang chủ</NavLink>
           <NavLink to="/trips" className="link">Tìm chuyến</NavLink>
-          {isAuthenticated && <NavLink to="/bookings" className="link">Vé của tôi</NavLink>}
+          {isAuthenticated && <NavLink to="/my-bookings" className="link">Vé của tôi</NavLink>}
           {isAdmin && <NavLink to="/admin/dashboard" className="link">Quản trị</NavLink>}
         </nav>
 

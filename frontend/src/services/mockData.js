@@ -9,31 +9,31 @@ export const MOCK_USERS = [
 ];
 
 const STATIONS = {
-  TPHCM: "Bến xe Miền Đông",
-  HaNoi: "Bến xe Mỹ Đình",
-  DaNang: "Bến xe Trung tâm Đà Nẵng",
-  DaLat: "Bến xe Liên tỉnh Đà Lạt",
-  NhaTrang: "Bến xe phía Nam Nha Trang",
-  CanTho: "Bến xe Cần Thơ",
-  VungTau: "Bến xe Vũng Tàu",
+  "TP.HCM": "Bến xe Miền Đông",
+  "Hà Nội": "Bến xe Mỹ Đình",
+  "Đà Nẵng": "Bến xe Trung tâm Đà Nẵng",
+  "Đà Lạt": "Bến xe Liên tỉnh Đà Lạt",
+  "Nha Trang": "Bến xe phía Nam Nha Trang",
+  "Cần Thơ": "Bến xe Cần Thơ",
+  "Vũng Tàu": "Bến xe Vũng Tàu",
 };
 
 // Danh sách chuyến mẫu. time = giờ khởi hành, duration = số phút di chuyển.
 const BASE_TRIPS = [
-  { id: 1, from: "TPHCM", to: "DaNang", time: "06:00", duration: 1000, price: 360000, busType: "Ghế ngồi 29 chỗ", seats: 29, available: 12 },
-  { id: 2, from: "TPHCM", to: "DaNang", time: "12:00", duration: 1000, price: 450000, busType: "Giường nằm 40 chỗ", seats: 40, available: 20 },
-  { id: 3, from: "TPHCM", to: "DaNang", time: "21:30", duration: 1000, price: 610000, busType: "Limousine 22 chỗ", seats: 22, available: 4 },
-  { id: 4, from: "DaNang", to: "TPHCM", time: "08:30", duration: 1000, price: 560000, busType: "Limousine 22 chỗ", seats: 22, available: 0 },
-  { id: 5, from: "DaNang", to: "TPHCM", time: "19:00", duration: 1000, price: 500000, busType: "Giường nằm 40 chỗ", seats: 40, available: 15 },
-  { id: 6, from: "TPHCM", to: "DaLat", time: "06:30", duration: 420, price: 220000, busType: "Ghế ngồi 29 chỗ", seats: 29, available: 9 },
-  { id: 7, from: "TPHCM", to: "DaLat", time: "13:00", duration: 420, price: 280000, busType: "Giường nằm 40 chỗ", seats: 40, available: 25 },
-  { id: 8, from: "TPHCM", to: "DaLat", time: "22:00", duration: 420, price: 380000, busType: "Limousine 22 chỗ", seats: 22, available: 7 },
-  { id: 9, from: "TPHCM", to: "NhaTrang", time: "20:00", duration: 500, price: 320000, busType: "Giường nằm 40 chỗ", seats: 40, available: 18 },
-  { id: 10, from: "TPHCM", to: "CanTho", time: "07:00", duration: 210, price: 130000, busType: "Ghế ngồi 29 chỗ", seats: 29, available: 14 },
-  { id: 11, from: "TPHCM", to: "CanTho", time: "15:30", duration: 210, price: 200000, busType: "Limousine 22 chỗ", seats: 22, available: 6 },
-  { id: 12, from: "TPHCM", to: "VungTau", time: "09:00", duration: 150, price: 110000, busType: "Ghế ngồi 29 chỗ", seats: 29, available: 21 },
-  { id: 13, from: "HaNoi", to: "DaNang", time: "18:00", duration: 840, price: 420000, busType: "Giường nằm 40 chỗ", seats: 40, available: 11 },
-  { id: 14, from: "HaNoi", to: "DaNang", time: "20:30", duration: 840, price: 560000, busType: "Limousine 22 chỗ", seats: 22, available: 3 },
+  { id: 1, from: "TP.HCM", to: "Đà Nẵng", time: "06:00", duration: 1000, price: 360000, busType: "Ghế ngồi 29 chỗ", seats: 29, available: 12 },
+  { id: 2, from: "TP.HCM", to: "Đà Nẵng", time: "12:00", duration: 1000, price: 450000, busType: "Giường nằm 40 chỗ", seats: 40, available: 20 },
+  { id: 3, from: "TP.HCM", to: "Đà Nẵng", time: "21:30", duration: 1000, price: 610000, busType: "Limousine 22 chỗ", seats: 22, available: 4 },
+  { id: 4, from: "Đà Nẵng", to: "TP.HCM", time: "08:30", duration: 1000, price: 560000, busType: "Limousine 22 chỗ", seats: 22, available: 0 },
+  { id: 5, from: "Đà Nẵng", to: "TP.HCM", time: "19:00", duration: 1000, price: 500000, busType: "Giường nằm 40 chỗ", seats: 40, available: 15 },
+  { id: 6, from: "TP.HCM", to: "Đà Lạt", time: "06:30", duration: 420, price: 220000, busType: "Ghế ngồi 29 chỗ", seats: 29, available: 9 },
+  { id: 7, from: "TP.HCM", to: "Đà Lạt", time: "13:00", duration: 420, price: 280000, busType: "Giường nằm 40 chỗ", seats: 40, available: 25 },
+  { id: 8, from: "TP.HCM", to: "Đà Lạt", time: "22:00", duration: 420, price: 380000, busType: "Limousine 22 chỗ", seats: 22, available: 7 },
+  { id: 9, from: "TP.HCM", to: "Nha Trang", time: "20:00", duration: 500, price: 320000, busType: "Giường nằm 40 chỗ", seats: 40, available: 18 },
+  { id: 10, from: "TP.HCM", to: "Cần Thơ", time: "07:00", duration: 210, price: 130000, busType: "Ghế ngồi 29 chỗ", seats: 29, available: 14 },
+  { id: 11, from: "TP.HCM", to: "Cần Thơ", time: "15:30", duration: 210, price: 200000, busType: "Limousine 22 chỗ", seats: 22, available: 6 },
+  { id: 12, from: "TP.HCM", to: "Vũng Tàu", time: "09:00", duration: 150, price: 110000, busType: "Ghế ngồi 29 chỗ", seats: 29, available: 21 },
+  { id: 13, from: "Hà Nội", to: "Đà Nẵng", time: "18:00", duration: 840, price: 420000, busType: "Giường nằm 40 chỗ", seats: 40, available: 11 },
+  { id: 14, from: "Hà Nội", to: "Đà Nẵng", time: "20:30", duration: 840, price: 560000, busType: "Limousine 22 chỗ", seats: 22, available: 3 },
 ];
 
 // Chuyển dữ liệu mẫu thành đúng dạng Trip mà API trả về, gắn vào ngày được chọn
@@ -69,14 +69,14 @@ export function getMockTripById(id) {
 }
 
 export const MOCK_POPULAR_ROUTES = [
-  { from: "TPHCM", to: "DaNang", durationMinutes: 1000, fromPrice: 360000 },
-  { from: "TPHCM", to: "DaLat", durationMinutes: 420, fromPrice: 220000 },
-  { from: "TPHCM", to: "NhaTrang", durationMinutes: 500, fromPrice: 320000 },
-  { from: "TPHCM", to: "CanTho", durationMinutes: 210, fromPrice: 130000 },
-  { from: "TPHCM", to: "VungTau", durationMinutes: 150, fromPrice: 110000 },
-  { from: "HaNoi", to: "DaNang", durationMinutes: 840, fromPrice: 420000 },
-  { from: "DaNang", to: "TPHCM", durationMinutes: 1000, fromPrice: 500000 },
-  { from: "DaLat", to: "TPHCM", durationMinutes: 420, fromPrice: 220000 },
+  { from: "TP.HCM", to: "Đà Nẵng", durationMinutes: 1000, fromPrice: 360000 },
+  { from: "TP.HCM", to: "Đà Lạt", durationMinutes: 420, fromPrice: 220000 },
+  { from: "TP.HCM", to: "Nha Trang", durationMinutes: 500, fromPrice: 320000 },
+  { from: "TP.HCM", to: "Cần Thơ", durationMinutes: 210, fromPrice: 130000 },
+  { from: "TP.HCM", to: "Vũng Tàu", durationMinutes: 150, fromPrice: 110000 },
+  { from: "Hà Nội", to: "Đà Nẵng", durationMinutes: 840, fromPrice: 420000 },
+  { from: "Đà Nẵng", to: "TP.HCM", durationMinutes: 1000, fromPrice: 500000 },
+  { from: "Đà Lạt", to: "TP.HCM", durationMinutes: 420, fromPrice: 220000 },
 ];
 
 export function getMockDashboard() {
